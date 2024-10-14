@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Manages the movement of the Camera
+/// </summary>
 public class CameraManager
 {
     private Camera camera;
@@ -11,7 +13,6 @@ public class CameraManager
     public int rotateSpeed = 10;
     public int zoomSpeed = 10;
     public float cameraDistance = 10;
-
 
     public CameraManager(Transform focusTransform, Transform cameraPivot)
     {

@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// The building block of the Grid, Cells represent individual tiles within the Grid, upon
+/// which Buildings and paths can be placed.
+/// </summary>
 public class Cell
 {
     private int type;
@@ -16,6 +19,9 @@ public class Cell
         this.y = y;
         this.type = EMPTY;
     }
+    /// <summary>
+    /// Sets the Cell's neighbors. Two Cells are neigbhors if they share an edge
+    /// </summary>
     public void SetNeighbors(List<Cell> neighbors)
     {
         this.neighbors = neighbors;
@@ -26,7 +32,6 @@ public class Cell
     public int GetX() { return x; }
     public int GetY() { return y; }
     public List<Cell> GetNeighbors() { return neighbors; }
-    //Sets cell as belonging to given building, and marks it as occupied
     public void SetBuilding(Building building)
     {
         this.building = building;
@@ -41,17 +46,25 @@ public class Cell
         building = null;
         type = EMPTY;
     }
-    //Returns true if this cell belongs to a building
+    /// <summary>
+    /// Returns true if this Cell belongs to a Building, and false otherwise
+    /// </summary>
     public bool IsBuilding()
     {
         return type == BUILDING;
     }
-    //Returns true if this cell is an entrance to its building
+    /// <summary>
+    /// Returns true if this Cell belongs to a Building, and is an entrance for that building, 
+    /// and false otherwise
+    /// </summary>
     public bool IsEntrance()
     {
         return building != null && building.IsEntrance(this);
     }
-    //Returns the pathfinding weight of the cell
+    /// <summary>
+    /// Returns the weight of the Cell for pathfinding
+    /// </summary>
+    /// <returns></returns>
     public int GetWeight()
     {
         switch(type)
@@ -84,7 +97,10 @@ public class Cell
             return hash;
         }
     }
-    //The speed at which a student walks accross the cell
+    /// <summary>
+    /// Returns the speed at which a student traverses this Cell.
+    /// </summary>
+    /// <returns></returns>
     public float GetTraversalSpeed()
     {
         if(type == EMPTY)

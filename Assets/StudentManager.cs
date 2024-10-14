@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Manages the creation, deletion, and pathfinding of Students.
+/// </summary>
 public class StudentManager
 {
     private Grid grid;
@@ -15,7 +17,9 @@ public class StudentManager
         this.grid = grid;
         students = new List<Student>();
     }
-
+    /// <summary>
+    /// Updates the position and, if elligble, pathfinding of every Student.
+    /// </summary>
     public void Update()
     {
         Debug.Log("updating...");
@@ -58,7 +62,10 @@ public class StudentManager
         }
         Debug.Log("done updating");
     }
-    //Create a new student with a random starting position and (different) random destination. Can only be created if there are 2 or more buildings. Returns a gameObject representation of student.
+    /// <summary>
+    /// Creates a new Student with a random position and destination
+    /// </summary>
+    /// <returns>The new Student's GameObject representation</returns>
     public GameObject CreateRandomStudent()
     {
         Debug.Log("sm55");

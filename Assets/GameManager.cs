@@ -4,7 +4,10 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UI;
 using TMPro;
-
+/// <summary>
+/// The GameManager is responsible for coordinating between all other managers, as well as for intializing 
+/// the game scene on startup.
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     public Grid grid;
@@ -103,7 +106,11 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
-    //Update cursor information
+    /// <summary>
+    /// Updates the position of both the world cursor GameObject, as well as the internal cursor position
+    /// in grid coordinates.
+    /// </summary>
+    /// <param name="position"> A Vector3Int representing the position of the cursor in world space</param>
     public void UpdateCursor(Vector3Int position)
     {
         //Update cursor position
@@ -124,18 +131,41 @@ public class GameManager : MonoBehaviour
             cursor.GetComponent<MeshFilter>().mesh = cursorPrefab;
         }
     }
-    //Convert 3D raycast position into 2D position
+    /// <summary>
+    /// Converts the position of the cursor/raycast hit into a Vector2Int usable in the grid or for cursor
+    /// GameObject positioning
+    /// </summary>
+    /// <param name="position"> A Vector3Int representing the position of the cursor in world space</param>
+    /// <returns> Returns a Vector2Int corresponding to the 2D position of the cursor </returns>
     public Vector2Int MousePositionToGridPosition(Vector3Int position)
     {
         Vector2Int pos = new Vector2Int(position.x, position.z);
         return pos;
     }
-    //Change current mode
+    /// <summary>
+    /// Sets the GameManager's mode to the given value
+    /// 0 - GameManager.NONE - Default mode, allows inspection of buildings
+    /// 1 - GameManager.PLACEMENT - Placement of buildings or pathways
+    /// 2 - GameManager.DEMOLITION - Demolition of buildings or pathways
+    /// </summary>
+    /// <param name="val"> Desired mode.</param>
+    //TODO: Check whether given value is a valid mode.
     public void SetMode(int val)
     {
         mode = val;
     }
+    /// <summary>
+    /// Returns the GameManager's current mode
+    /// 0 - GameManager.NONE - Default mode, allows inspection of buildings
+    /// 1 - GameManager.PLACEMENT - Placement of buildings or pathways
+    /// 2 - GameManager.DEMOLITION - Demolition of buildings or pathways
+    /// </summary>
+    /// <returns> The GameManager's current mode </returns>
     public int GetMode() { return mode; }
+    /// <summary>
+    /// Used to alert the GameManager that the mouse was clicked, and to take action corresponding to the
+    /// GameManager's current mode.
+    /// </summary>
     public void MouseClicked()
     {
         switch(mode)
@@ -151,7 +181,12 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
-    //Adds gameObject to the scene at position
+    /// <summary>
+    /// Adds given GameObject to GameManager's list
+    /// </summary>
+    /// <param name="gameObject">Object to add to list</param>
+    /// <param name="position">Starting position of the given object</param>
+    /// <returns></returns>
     public GameObject AddNewGameObject(GameObject gameObject, Vector2Int position)
     {
         GameObject obj = Instantiate(gameObject);
@@ -159,14 +194,28 @@ public class GameManager : MonoBehaviour
         gameObjects.Add(obj);
         return obj;
     }
-    //Removes the gameObject from the manager's list, then destroys it
+    /// <summary>
+    /// Removes the given GameObject from the GameMangaer's list, and destroys it
+    /// </summary>
+    /// <param name="gameObject">GameObject to be removed</param>
     public void RemoveGameObject(GameObject gameObject)
     {
         gameObjects.Remove(gameObject);
         Destroy(gameObject);
     }
+    /// <summary>
+    /// Returns the GameManager's BuildingManager
+    /// </summary>
     public BuildingManager GetBuildingManager() { return buildingManager; }
+    /// <summary>
+    /// Returns the GameManager's PlacementManager
+    /// </summary>
     public PlacementManager GetPlacementManager() { return placementManager; }
+    /// <summary>
+    /// Used to cycle between non-GameManager modes, such as PlacementManager placementMode.
+    /// Determined by the GameManager's current mode
+    /// </summary>
+    /// <param name="amount">Amount to cycle by</param>
     public void Cycle(int amount)
     {
         switch(mode)
@@ -176,6 +225,10 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
+    /// <summary>
+    /// Adds a student to the game. Student will have a random starting position and destination. 
+    /// Used for testing
+    /// </summary>
     public void AddRandomStudent()
     {
         GameObject gameObject = studentManager.CreateRandomStudent();
@@ -184,6 +237,7 @@ public class GameManager : MonoBehaviour
             gameObjects.Add(gameObject);
         }
     }
+    // TODO: Create Path/RoadManager class to handle the placement and operations of roads and paths
     public void AddPath(int x, int y)
     {
         grid.GetCell(x, y).SetType(Cell.PATH);
@@ -206,6 +260,9 @@ public class GameManager : MonoBehaviour
         }
         gameObjects.RemoveAll(obj => obj.name == ("path" + position.x + "," + position.y));
     }
+    /// <summary>
+    /// Used to clear the GameManager's currently selected building
+    /// </summary>
     public void ClearSelectedBuilding()
     {
         selectedBuilding = null;

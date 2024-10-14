@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Student agent
+/// </summary>
 public class Student
 {
     private int id;
@@ -16,8 +18,12 @@ public class Student
         this.id = id;
         travel = 0;
     }
-    //Determines a student's path from their current position to the closest entrance in their destination building
-    //Uses dijkstra's algorithm
+    /// <summary>
+    /// Populates the path list with Cells which represent a path going between the Student's
+    /// current postion, and the closest entrance belonging to the Student's destination 
+    /// building. Uses Dijkstra's algorithm to compute the path.
+    /// </summary>
+    /// <param name="grid">The Grid used to calculate the path</param>
     public void CalculatePath(Grid grid)
     {
         Debug.Log("Student " + id + " is finding a path from " + position + " to building " + destination.GetID());
@@ -81,32 +87,20 @@ public class Student
         }
         else
         {
-            Debug.Log("Student " + id + "'s path from " + position + " to building " + destination.GetID());
-            string output = "";
-            for(int y = 0; y < grid.GetHeight(); y++)
-            {
-                for(int x = 0; x < grid.GetWidth(); x++)
-                {
-                    if(distMap.ContainsKey(grid.GetCell(x,y)))
-                    {
-                        output += distMap[grid.GetCell(x, y)].ToString().PadLeft(4) + ",";
-                    }
-                    else
-                    {
-                        output += "    ,";
-                    }
-                }
-                output += "\n";
-            }
-            Debug.Log(output);
+            PrintPathfindingMap();
         }
     }
-    //Return true if the student has a path
+    /// <summary>
+    /// Returns true if the Student has a valid path, and false otherwise.
+    /// </summary>
     public bool HasPath()
     {
         return path != null && path.Count > 0;
     }
-    //Update the student's position along the path. If the student has reached the end of their path, return false. Otherwise, return true
+    /// <summary>
+    /// Update the Student's position along the path
+    /// </summary>
+    /// <returns></returns>
     public bool Update()
     {
         if(gameObject != null && path.Count > 0)
@@ -138,19 +132,29 @@ public class Student
         }
         return false;
     }
-    //Returns the cell which the student is currently in
+    /// <summary>
+    /// Returns the current Cell the Student occupies
+    /// </summary>
     public Cell GetPositionCell() { return position; }
-    //Sets (new) destination
+    /// <summary>
+    /// Sets the Student's destination building. Will not update pathfinding.
+    /// </summary>
     public void SetDestination(Building destination)
     {
         this.destination = destination;
     }
-    //Sets position cell
+    /// <summary>
+    /// Sets the Student's current position Cell and resets traversal.
+    /// </summary>
+    //TODO: Check behavior when changing position while Student is moving.
     public void SetPosition(Cell cell)
     {
+        travel = 0;
         position = cell;
     }
-    //Set gameObject
+    /// <summary>
+    /// Set's the Student's GameObject
+    /// </summary>
     public void SetGameObject(GameObject gameObject)
     {
         this.gameObject = gameObject;
@@ -160,4 +164,29 @@ public class Student
         Object.Destroy(gameObject);
     }
     public int GetID() { return id; }
+    /// <summary>
+    /// Prints a map of the Student's last pathfinding attempt. Values indicate the path
+    /// distance from the given cell to the Student's current positon, represented by zero.
+    /// </summary>
+    public void PrintPathfindingMap()
+    {
+        Debug.Log("Student " + id + "'s path from " + position + " to building " + destination.GetID());
+        string output = "";
+        for (int y = 0; y < grid.GetHeight(); y++)
+        {
+            for (int x = 0; x < grid.GetWidth(); x++)
+            {
+                if (distMap.ContainsKey(grid.GetCell(x, y)))
+                {
+                    output += distMap[grid.GetCell(x, y)].ToString().PadLeft(4) + ",";
+                }
+                else
+                {
+                    output += "    ,";
+                }
+            }
+            output += "\n";
+        }
+        Debug.Log(output);
+    }
 }

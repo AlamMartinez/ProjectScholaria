@@ -1,7 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// A template for a Building. Uses a 2D array of integers to represent the Building's footprint, with
+/// 0's representing empty space, 1's representing structures, and 2's representing entrances to the
+/// building. Also includes a GameObject prefab, which is placed in the world alongside the creation of
+/// the Building object.
+/// </summary>
 public class BuildingTemplate
 {
     private int id;

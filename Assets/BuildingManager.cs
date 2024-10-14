@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-
+/// <summary>
+/// The BuildingManager is responsible for the placement, removal, and operation of Buildings.
+/// </summary>
 public class BuildingManager
 {
     private GameManager gameManager;
@@ -11,7 +13,11 @@ public class BuildingManager
     private List<BuildingTemplate> templates;
     private int currentTemplate;
     private int buildingIndex;
-
+    /// <summary>
+    /// Creates a new BuildingManager, and initializes all BuildingTemplates.
+    /// </summary>
+    /// <param name="gameManager">The GameManager to which this BuildingManager belongs</param>
+    /// <param name="grid">The Grid used by the GameManager</param>
     public BuildingManager(GameManager gameManager, Grid grid)
     {
         this.gameManager = gameManager;
@@ -56,10 +62,19 @@ public class BuildingManager
         }
         currentTemplate = 0;
     }
+    /// <summary>
+    /// Returns the current BuildingTemplate in use by the BuildingManager.
+    /// </summary>
     public BuildingTemplate GetCurrentTemplate()
     {
         return templates[currentTemplate];
     }
+    /// <summary>
+    /// Constructs a building at the given position using the current template. The BuildingManager is not
+    /// responsible for checking whether a position is clear, so use PlacementManager first!
+    /// </summary>
+    /// <param name="position">The grid position to place the Building at</param>
+    /// <param name="template">The BuildingTemplate to use</param>
     public void ConstructBuilding(Vector2Int position, BuildingTemplate template)
     {
         Building building = new Building(buildingIndex++);
@@ -85,19 +100,33 @@ public class BuildingManager
         building.AddGameObject(gameManager.AddNewGameObject(template.GetPrefab(), position));
         Debug.Log("Created new building: " + building);
     }
+    /// <summary>
+    /// Demolishes the building at the given position.
+    /// </summary>
+    /// <param name="position"></param>
+    // TODO: May cause error if Cell does not have an assigned Building?
     public void DemolishBuilding(Vector2Int position)
     {
         gameManager.RemoveGameObject(grid.GetCell(position.x, position.y).GetBuilding().GetGameObject());
         grid.GetCell(position.x, position.y).GetBuilding().Demolish();
     }
-    //Returns a random building of any type
+    /// <summary>
+    /// Returns a random Building of any type
+    /// </summary>
+    /// <returns></returns>
+    //TODO: May cause error if no Buildings exist, but prevented by Students asking only when 2 or more exist
     public Building GetRandomBuilding()
     {
         return buildings[Random.Range(0, buildings.Count)];
     }
-    //Returns the current number of buildings
+    /// <summary>
+    /// Returns the current number of Buildings
+    /// </summary>
+    /// <returns></returns>
     public int GetBuildingCount() { return buildings.Count; }
-    //Changes the currently selected building template
+    /// <summary>
+    /// Increments the currently selected BuildingTemplate by the given amount.
+    /// </summary>
     public void IncrementBuildingSelection(int amount)
     {
         currentTemplate = (currentTemplate + amount + templates.Count) % templates.Count;

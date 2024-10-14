@@ -4,7 +4,9 @@ using System.Collections.Generic;
 public class Grid
 {
     private Cell[,] grid;
-
+    /// <summary>
+    /// Create a new Grid of size width * height, and populate it with empty Cells
+    /// </summary>
     public Grid(int width, int height)
     {
         grid = new Cell[width,height];
@@ -39,15 +41,20 @@ public class Grid
             }
         }
     }
-    //Convert x and y coordinate to unique ID for cells
+    /// <summary>
+    /// Converts the given X and Y coordinate into a unique ID number for the Cell at that
+    /// position
+    /// </summary>
     private int CoordsToID(int x, int y)
     {
         return x + y * grid.GetLength(0);
     }
-    //Return width/height of cell grid
     public int GetWidth() { return grid.GetLength(0); }
     public int GetHeight() { return grid.GetLength(1); }
-    //Return Cell at given coordinates, or null if coordinates are outside grid
+    /// <summary>
+    /// Returns the Cell at the given coordinates, or null if the coordinates are outside of
+    /// the Grid
+    /// </summary>
     public Cell GetCell(int x, int y)
     {
         if(x >= 0 && x < grid.GetLength(0) && y >= 0 && y < grid.GetLength(1))
@@ -56,9 +63,16 @@ public class Grid
         }
         return null;
     }
+    /// <summary>
+    /// Sets the Building for the Cell at positon X, Y. Does nothing if the given coordinates
+    /// are outside of the Grid
+    /// </summary>
     public void SetCellBuilding(int x, int y, Building b)
     {
-        grid[x, y].SetBuilding(b);
+        if (x >= 0 && x < grid.GetLength(0) && y >= 0 && y < grid.GetLength(1))
+        {
+            grid[x, y].SetBuilding(b);
+        }
     }
 
 }

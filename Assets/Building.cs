@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
-
+/// <summary>
+/// A placeable Building. Contains a list of Cells which are occupied by the Building
+/// </summary>
 public class Building
 {
     private int id;
@@ -12,7 +14,10 @@ public class Building
     private int type;
     private string name;
     private int visits;
-
+    /// <summary>
+    /// Creates a new building with given ID
+    /// </summary>
+    /// <param name="id">Building's unique ID number</param>
     public Building(int id)
     {
         this.id = id;
@@ -21,20 +26,34 @@ public class Building
         type = Random.Range(1, 4);
         visits = 0;
     }
+    /// <summary>
+    /// Adds the given Cell to the Building's list of included cells
+    /// </summary>
+    /// <param name="cell">Cell to be added</param>
     public void AddCell(Cell cell)
     {
         cells.Add(cell);
     }
+    /// <summary>
+    /// Adds the given Cell to the Building's list of entrances
+    /// </summary>
+    /// <param name="cell">Cell to be added</param>
     public void AddEntrance(Cell cell)
     {
         entrances.Add(cell);
     }
-    //Returns true if cell is an entrance to the building
+    /// <summary>
+    /// Returns true if the given Cell is an entrance to this Building, and false otherwise
+    /// </summary>
+    /// <param name="cell">Cell to be checked</param>
+    /// <returns></returns>
     public bool IsEntrance(Cell cell)
     {
         return entrances.Contains(cell);
     }
-    //Demolishes a building. Sets all cells to empty and removes their building, then removes them from lists
+    /// <summary>
+    /// Removes all Cells from this Building's lists, and clears the set builing for all contained Cells
+    /// </summary>
     public void Demolish()
     {
         foreach (Cell cell in cells)
@@ -44,18 +63,25 @@ public class Building
         cells.Clear();
         entrances.Clear();
     }
-    //Sets the building's gameObject in the scene;
+    /// <summary>
+    /// Sets the Building's GameObject representation
+    /// </summary>
     public void AddGameObject(GameObject gameObject)
     {
         this.gameObject = gameObject;
     }
-    //Return building's gameObject
+    /// <summary>
+    /// Gets the Building's GameObject representation
+    /// </summary>
     public GameObject GetGameObject()
     {
         return gameObject;
     }
     public int GetID() { return id; }
-    //Return a random entrance of the building, used for student pathfinding
+    /// <summary>
+    /// Returns a random entrance included within the Building. 
+    /// </summary>
+    /// <returns></returns>
     public Cell GetRandomEntrance() { return entrances[Random.Range(0, entrances.Count)]; }
     public override bool Equals(object obj)
     {
@@ -65,6 +91,10 @@ public class Building
         }
         return false;
     }
+    /// <summary>
+    /// Returns the string representation of this Building's type.
+    /// </summary>
+    /// <returns></returns>
     public string GetType()
     {
         switch(type)
@@ -76,6 +106,9 @@ public class Building
         }
         return "Unspecified";
     }
+    /// <summary>
+    /// Sets this Building's name. Can be different than its prefab name.
+    /// </summary>
     public void SetName(string name) { this.name = name; }
     //Returns a string containing the name of the building in title case
     public string GetName()

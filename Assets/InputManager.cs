@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-
+/// <summary>
+/// Observes game input and sends it to the GameManager
+/// </summary>
 public class InputManager : MonoBehaviour
 {
     public GameManager gameManager;
