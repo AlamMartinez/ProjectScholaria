@@ -149,10 +149,25 @@ public class GameManager : MonoBehaviour
     /// 2 - GameManager.DEMOLITION - Demolition of buildings or pathways
     /// </summary>
     /// <param name="val"> Desired mode.</param>
-    //TODO: Check whether given value is a valid mode.
     public void SetMode(int val)
     {
-        mode = val;
+        switch (val)
+        {
+            case NONE:
+                mode = NONE;
+                Debug.Log("Switched to inspection mode");
+                break;
+            case PLACEMENT:
+                mode = PLACEMENT;
+                Debug.Log("Switched to placement mode");
+                break;
+            case DEMOLITION:
+                mode = DEMOLITION;
+                Debug.Log("Switched to demolition mode");
+                break;
+            default:
+                Debug.Log("Tried to switch to invalid mode");
+        }
     }
     /// <summary>
     /// Returns the GameManager's current mode

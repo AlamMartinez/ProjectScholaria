@@ -104,25 +104,28 @@ public class BuildingManager
     /// Demolishes the building at the given position.
     /// </summary>
     /// <param name="position"></param>
-    // TODO: May cause error if Cell does not have an assigned Building?
     public void DemolishBuilding(Vector2Int position)
     {
-        gameManager.RemoveGameObject(grid.GetCell(position.x, position.y).GetBuilding().GetGameObject());
-        grid.GetCell(position.x, position.y).GetBuilding().Demolish();
+        if((grid.GetCell(position.x, position.y).IsBuilding()) {
+            gameManager.RemoveGameObject(grid.GetCell(position.x, position.y).GetBuilding().GetGameObject());
+            grid.GetCell(position.x, position.y).GetBuilding().Demolish();
+        }
+        Debug.Log("No building at (" + position.x + ", " + position.y + ") to demolish");
     }
     /// <summary>
-    /// Returns a random Building of any type
+    /// Returns a random Building of any type. If there are no Nuildings, return null;
     /// </summary>
-    /// <returns></returns>
-    //TODO: May cause error if no Buildings exist, but prevented by Students asking only when 2 or more exist
     public Building GetRandomBuilding()
     {
-        return buildings[Random.Range(0, buildings.Count)];
+        if(buildings.Count > 0)
+        {
+            return buildings[Random.Range(0, buildings.Count)];
+        }
+        return null;
     }
     /// <summary>
     /// Returns the current number of Buildings
     /// </summary>
-    /// <returns></returns>
     public int GetBuildingCount() { return buildings.Count; }
     /// <summary>
     /// Increments the currently selected BuildingTemplate by the given amount.

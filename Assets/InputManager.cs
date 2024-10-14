@@ -94,7 +94,6 @@ public class InputManager : MonoBehaviour
         //Submit button TODO: swap with official use
         if(Input.GetButtonDown("Submit"))
         {
-            Debug.Log("im76");
             gameManager.AddRandomStudent();
         }
         //TODO: make better

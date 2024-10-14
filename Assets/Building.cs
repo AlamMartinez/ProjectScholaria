@@ -17,7 +17,6 @@ public class Building
     /// <summary>
     /// Creates a new building with given ID
     /// </summary>
-    /// <param name="id">Building's unique ID number</param>
     public Building(int id)
     {
         this.id = id;
@@ -29,7 +28,6 @@ public class Building
     /// <summary>
     /// Adds the given Cell to the Building's list of included cells
     /// </summary>
-    /// <param name="cell">Cell to be added</param>
     public void AddCell(Cell cell)
     {
         cells.Add(cell);
@@ -37,7 +35,6 @@ public class Building
     /// <summary>
     /// Adds the given Cell to the Building's list of entrances
     /// </summary>
-    /// <param name="cell">Cell to be added</param>
     public void AddEntrance(Cell cell)
     {
         entrances.Add(cell);
@@ -45,8 +42,6 @@ public class Building
     /// <summary>
     /// Returns true if the given Cell is an entrance to this Building, and false otherwise
     /// </summary>
-    /// <param name="cell">Cell to be checked</param>
-    /// <returns></returns>
     public bool IsEntrance(Cell cell)
     {
         return entrances.Contains(cell);
@@ -81,7 +76,6 @@ public class Building
     /// <summary>
     /// Returns a random entrance included within the Building. 
     /// </summary>
-    /// <returns></returns>
     public Cell GetRandomEntrance() { return entrances[Random.Range(0, entrances.Count)]; }
     public override bool Equals(object obj)
     {
@@ -94,7 +88,6 @@ public class Building
     /// <summary>
     /// Returns the string representation of this Building's type.
     /// </summary>
-    /// <returns></returns>
     public string GetType()
     {
         switch(type)
