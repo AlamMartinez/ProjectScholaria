@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public BuildingManager buildingManager;
     public PlacementManager placementManager;
     public InputManager inputManager;
+    public UILayer uiLayer;
 
     private Vector2Int cursorPosition;
     private int mode;
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour
         placementManager = new PlacementManager(this, buildingManager, grid);
         mode = NONE;
         gameObjects = new List<GameObject>();
+        uiLayer = new UILayer(this, grid);
 
         //Set up ground plane
         ground = new GameObject("Ground");
@@ -66,7 +68,6 @@ public class GameManager : MonoBehaviour
         MeshCollider collider = ground.AddComponent<MeshCollider>();
         collider.sharedMesh = mesh;
         ground.AddComponent<MeshCollider>();
-
     }
     void Update()
     {
