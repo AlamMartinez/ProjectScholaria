@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 using UnityEngine.UI;
 using TMPro;
 /// <summary>
-/// The GameManager is responsible for coordinating between all other managers, as well as for intializing 
+/// The GameManager is responsible for coordinating between all other managers, as well as for intializing
 /// the game scene on startup.
 /// </summary>
 public class GameManager : MonoBehaviour
@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public BuildingManager buildingManager;
     public PlacementManager placementManager;
     public InputManager inputManager;
-    
+
     private Vector2Int cursorPosition;
     private int mode;
 
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
         MeshCollider collider = ground.AddComponent<MeshCollider>();
         collider.sharedMesh = mesh;
         ground.AddComponent<MeshCollider>();
-        
+
     }
     void Update()
     {
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
             case NONE:
                 modeDisplay.text = "Mode: Overview";
                 break;
-            case PLACEMENT: 
+            case PLACEMENT:
                 switch(placementManager.GetPlacementMode())
                 {
                     case PlacementManager.BUILDING:
@@ -242,7 +242,7 @@ public class GameManager : MonoBehaviour
         }
     }
     /// <summary>
-    /// Adds a student to the game. Student will have a random starting position and destination. 
+    /// Adds a student to the game. Student will have a random starting position and destination.
     /// Used for testing
     /// </summary>
     public void AddRandomStudent()
