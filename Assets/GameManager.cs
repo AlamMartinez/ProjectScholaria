@@ -167,6 +167,7 @@ public class GameManager : MonoBehaviour
                 break;
             default:
                 Debug.Log("Tried to switch to invalid mode");
+                break;
         }
     }
     /// <summary>
