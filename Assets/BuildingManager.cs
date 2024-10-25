@@ -106,7 +106,7 @@ public class BuildingManager
     /// <param name="position"></param>
     public void DemolishBuilding(Vector2Int position)
     {
-        if((grid.GetCell(position.x, position.y).IsBuilding()) {
+        if(grid.GetCell(position.x, position.y).IsBuilding()) {
             gameManager.RemoveGameObject(grid.GetCell(position.x, position.y).GetBuilding().GetGameObject());
             grid.GetCell(position.x, position.y).GetBuilding().Demolish();
         }
