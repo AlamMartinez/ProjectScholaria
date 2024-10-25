@@ -87,7 +87,7 @@ public class Student
         }
         else
         {
-            PrintPathfindingMap();
+            PrintPathfindingMap(grid,distMap);
         }
     }
     /// <summary>
@@ -168,7 +168,7 @@ public class Student
     /// Prints a map of the Student's last pathfinding attempt. Values indicate the path
     /// distance from the given cell to the Student's current positon, represented by zero.
     /// </summary>
-    public void PrintPathfindingMap()
+    public void PrintPathfindingMap(Grid grid, Dictionary<Cell, int> distMap)
     {
         Debug.Log("Student " + id + "'s path from " + position + " to building " + destination.GetID());
         string output = "";
