@@ -39,6 +39,8 @@ public class GameManager : MonoBehaviour
         placementManager = new PlacementManager(this, buildingManager, grid);
         mode = NONE;
         gameObjects = new List<GameObject>();
+
+        //set up ui
         uiLayer = new UILayer(this, grid);
 
         //Set up ground plane
