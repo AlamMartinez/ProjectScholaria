@@ -7,28 +7,20 @@ using UnityEngine.UI;
 using UnityEngine.UIElements;
 using TMPro;
 
-//public struct UI_State
-//{
-//    int currentMode;
-//
-//    public UI_State() {
-//        mode = 0;
-//    }
-//}
+public struct UI_State
+{
+    int currentMode;
+    bool confirmationConext = false;
+}
 
 public class UILayer : MonoBehaviour
 {
     public GameManager gameManager;
     public GameObject pauseUI;
+    public GameObject confirmationUI;
     public TextMeshProUGUI infoDisplay;
-    //private UI_State uiState;
-    private Grid grid;
+    private UI_State uiState;
 
-
-    public UILayer(GameManager gameManager, Grid grid)
-    {
-        //uiState = new UI_State();
-    }
 
     public void OnResetPress()
     {
@@ -52,6 +44,15 @@ public class UILayer : MonoBehaviour
         gameManager.Cycle(1);
     }
 
+    public void OnConfirmYes() {
+        confirmationUI.SetActive(false);
+    }
+
+    public void OnConfirmCancel() {
+        confirmationUI.SetActive(false);
+        pauseUI.SetActive(false);
+    }
+
     void Start()
     {
         //this.uiState.currentMode = gameManager.GetMode();
@@ -69,26 +70,27 @@ public class UILayer : MonoBehaviour
         switch(gameManager.GetMode())
         {
             case 0:
-                modeText = "Mode: Overview";
+                modeText = "Overview";
                 break;
             case 1:
                 switch(gameManager.GetPlacementManager().GetPlacementMode())
                 {
                     case 1:
-                        modeText = "Mode: Placing Buildings";
+                        modeText = "Placing Buildings";
                         break;
                     case 2:
-                        modeText = "Mode: Placing Pathways";
+                        modeText = "Placing Pathways";
                         break;
                 }
                 break;
             case 2:
-                modeText = "Mode: Demolition";
+                modeText = "Demolition";
                 break;
         }
 
         //update ui info
         infoDisplay.text = "Students: " + gameManager.GetGameState().numStudents +
-            "\nCurrent Mode: " + modeText;
+            "\nCurrent Mode: " + modeText +
+            "\nSelected Building: " + gameManager.GetGameState().selectionContext;
     }
 }

@@ -6,9 +6,11 @@ using UnityEngine.UI;
 using TMPro;
 public struct GameState {
     public int numStudents;
+    public string selectionContext;
 
     public GameState(int value) {
         this.numStudents = value;
+        this.selectionContext = "";
     }
 }
 /// <summary>
@@ -50,9 +52,6 @@ public class GameManager : MonoBehaviour
         gameObjects = new List<GameObject>();
         gameState = new GameState(0);
 
-        //set up ui
-
-
         //Set up ground plane
         ground = new GameObject("Ground");
         ground.AddComponent<MeshFilter>();
@@ -87,15 +86,15 @@ public class GameManager : MonoBehaviour
         //Update selected building UI
         if(selectedBuilding != null)
         {
-            buildingDisplay.text = "Selected Building: " + selectedBuilding.GetName() + "\nDesignation: " + selectedBuilding.GetType() + "\nVisits: " + selectedBuilding.GetVisits();
+            gameState.selectionContext = "Selected Building: " + selectedBuilding.GetName() /*+ "\nDesignation: " + selectedBuilding.GetType() + "\nVisits: " + selectedBuilding.GetVisits()*/;
         }
         else if (buildingManager.GetCurrentTemplate() != null && mode == PLACEMENT && placementManager.GetPlacementMode() == PlacementManager.BUILDING)
         {
-            buildingDisplay.text = "Selected Building: " + buildingManager.GetCurrentTemplate().GetName();
+            gameState.selectionContext = "Selected Building: " + buildingManager.GetCurrentTemplate().GetName();
         }
         else
         {
-            buildingDisplay.text = "";
+            gameState.selectionContext = "";
         }
         //Update mode UI
         switch(mode)
@@ -298,6 +297,7 @@ public class GameManager : MonoBehaviour
         selectedBuilding = null;
     }
     public GameState GetGameState() { return gameState; }
+    public Building GetSelectedBuilding() { return selectedBuilding; }
 
     public const int NONE = 0;
     public const int PLACEMENT = 1;
