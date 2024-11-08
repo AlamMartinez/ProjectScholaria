@@ -8,6 +8,14 @@ using TMPro;
 /// The GameManager is responsible for coordinating between all other managers, as well as for intializing
 /// the game scene on startup.
 /// </summary>
+public struct GameState {
+    int numStudents;
+
+    GameState() {
+        this.numStudents = 0;
+    }
+}
+
 public class GameManager : MonoBehaviour
 {
     public Grid grid;
@@ -20,6 +28,7 @@ public class GameManager : MonoBehaviour
     private Vector2Int cursorPosition;
     public int mode;
 
+    public GameState gameState;
     private List<GameObject> gameObjects;
     public GameObject cursor;
     public Mesh cursorPrefab;
@@ -39,9 +48,10 @@ public class GameManager : MonoBehaviour
         placementManager = new PlacementManager(this, buildingManager, grid);
         mode = NONE;
         gameObjects = new List<GameObject>();
+        gameState = new GameState();
 
         //set up ui
-        uiLayer = new UILayer(this, grid);
+
 
         //Set up ground plane
         ground = new GameObject("Ground");
@@ -254,6 +264,7 @@ public class GameManager : MonoBehaviour
         if(gameObject != null)
         {
             gameObjects.Add(gameObject);
+            gameState.numStudents++;
         }
     }
     // TODO: Create Path/RoadManager class to handle the placement and operations of roads and paths
@@ -286,6 +297,8 @@ public class GameManager : MonoBehaviour
     {
         selectedBuilding = null;
     }
+    public GameState GetGameState() { return gameState; }
+
     public const int NONE = 0;
     public const int PLACEMENT = 1;
     public const int DEMOLITION = 2;
