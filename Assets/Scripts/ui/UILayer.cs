@@ -35,7 +35,7 @@ public class UILayer : MonoBehaviour
     }
 
     public void OnExitPress() {
-
+        SceneManager.LoadScene(0);
     }
 
     void Start()
