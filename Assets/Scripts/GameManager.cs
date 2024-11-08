@@ -4,17 +4,17 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UI;
 using TMPro;
+public struct GameState {
+    public int numStudents;
+
+    public GameState(int value) {
+        this.numStudents = value;
+    }
+}
 /// <summary>
 /// The GameManager is responsible for coordinating between all other managers, as well as for intializing
 /// the game scene on startup.
 /// </summary>
-public struct GameState {
-    int numStudents;
-
-    GameState() {
-        this.numStudents = 0;
-    }
-}
 
 public class GameManager : MonoBehaviour
 {
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
         placementManager = new PlacementManager(this, buildingManager, grid);
         mode = NONE;
         gameObjects = new List<GameObject>();
-        gameState = new GameState();
+        gameState = new GameState(0);
 
         //set up ui
 
