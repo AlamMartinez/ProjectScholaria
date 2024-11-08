@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public UILayer uiLayer;
 
     private Vector2Int cursorPosition;
-    private int mode;
+    public int mode;
 
     private List<GameObject> gameObjects;
     public GameObject cursor;
