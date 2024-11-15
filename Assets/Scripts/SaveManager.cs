@@ -14,6 +14,7 @@ public class SaveManager : MonoBehaviour
         this._saveData = new SaveData();
         this._saveData.buildings = new BuildingSaves(gm);
         this._saveData.paths = new PathSaves(gm);
+        this._saveData.students = new StudentSaves();
     }
 
     [System.Serializable]
@@ -21,6 +22,7 @@ public class SaveManager : MonoBehaviour
     {
         public BuildingSaves buildings;
         public PathSaves paths;
+        public StudentSaves students;
     }
 
     public static string GetSaveFileName()
@@ -34,6 +36,7 @@ public class SaveManager : MonoBehaviour
         Debug.Log("Copying game state");
         _saveData.buildings.Save();
         _saveData.paths.Save();
+        _saveData.students.amount = _gameMgr.GetGameState().numStudents;
 
         Debug.Log("Writing to save file");
         File.WriteAllText(GetSaveFileName(), JsonUtility.ToJson(_saveData, true));
@@ -54,6 +57,10 @@ public class SaveManager : MonoBehaviour
         _saveData.paths.gm = _gameMgr;
         _saveData.buildings.Load();
         _saveData.paths.Load();
+        for(int i = 0; i < _saveData.students.amount; i++)
+        {
+            _gameMgr.AddRandomStudent();
+        }
     }
 }
 [System.Serializable]
@@ -142,4 +149,10 @@ public struct BuildingSave
     public int visits;
     public int template;
     public Vector2Int boardPos;
+}
+
+[System.Serializable]
+public struct StudentSaves
+{
+    public int amount;
 }
