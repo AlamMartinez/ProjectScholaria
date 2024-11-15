@@ -14,6 +14,7 @@ public class Vehicles
     private int studentCapacity;
     private int currCapacity;
     private int busStopIndex;
+    private int waitingCount;
 
     public Vehicles(int id, char vechicleType)
     {
@@ -22,6 +23,7 @@ public class Vehicles
         travel = 0;
         currCapacity = 0;
         busStopIndex = 1;
+        waitingCount = 0;
     }
 
     public void SetStudentCapacity(char vehicleType)
@@ -77,7 +79,7 @@ public class Vehicles
 
             foreach (Cell neighborCell in currentCell.GetNeighbors())
             {
-                if (neighborCell.IsRoad() || neighborCell.IsBusStop())
+                if (neighborCell.IsRoad() || neighborCell.IsBusStop() || neighborCell.IsCrossWalk())
                 {
                     int dist = distMap[currentCell] + neighborCell.GetWeight();
                     //Debug.Log("currNE [" + neighborCell.GetX() + ", " + neighborCell.GetY()
@@ -154,6 +156,14 @@ public class Vehicles
 
     public bool Update()
     {
+        Debug.Log("wating bus count is ... " + waitingCount);
+        if (position.IsBusStop() && waitingCount < 5000)
+        {
+            waitingCount++;
+            return false;
+        }
+
+
         Debug.Log("Bus: " + id + " has a path of [" + path.Count + "]");
         if (gameObject != null && path.Count > 0)
         {
@@ -176,6 +186,10 @@ public class Vehicles
                 position = path[0];
                 path.RemoveAt(0);
 
+                if (path.Count == 0)
+                {
+                    waitingCount = 0;
+                }
             }
             return true;
         }

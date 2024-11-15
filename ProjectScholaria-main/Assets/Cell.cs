@@ -71,6 +71,11 @@ public class Cell
     {
         return type == BUS_STOP;
     }
+
+    public bool IsCrossWalk()
+    {
+        return type == CROSS_WALK;
+    }
     /// <summary>
     /// Returns the weight of the Cell for pathfinding
     /// </summary>
@@ -79,12 +84,13 @@ public class Cell
     {
         switch(type)
         {
-            case EMPTY: return 3;
-            case PATH:
-            case ROAD:
-            case BUS_STOP:
-            case BUILDING: return 1;
-            default: return 5;
+            case EMPTY: return 30;
+            case PATH: return 10;
+            case CROSS_WALK: return 5;
+            case ROAD: return 5;
+            case BUS_STOP: return 5;
+            case BUILDING: return 10;
+            default: return 50;
         }
     }
     public override string ToString()
@@ -126,4 +132,5 @@ public class Cell
     public const int BUILDING = 2;
     public const int ROAD = 3;
     public const int BUS_STOP = 4;
+    public const int CROSS_WALK = 5;
 }

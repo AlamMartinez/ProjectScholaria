@@ -106,4 +106,9 @@ public class StudentManager
             return null;
         }
     }
+
+    public List<Student> GetListOfStudents()
+    {
+        return students;
+    }
 }

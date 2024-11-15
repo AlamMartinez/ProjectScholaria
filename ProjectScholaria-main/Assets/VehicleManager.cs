@@ -10,6 +10,7 @@ public class VehicleManager
     private GameManager gameManager;
     private List<Vehicles> vehicles;
     private int vehicleIndex;
+    private IEnumerator corocutine;
 
     public VehicleManager(GameManager gameManager, Grid grid)
     {
@@ -46,11 +47,6 @@ public class VehicleManager
                 }
             }
 
-            if (grid.GetCell(vehicle.GetPosition().GetX(), vehicle.GetPosition().GetY()).IsBusStop())
-            {
-                //yield WaitForSeconds(5);
-            }
-
             if(vehicle.HasPath())
             {
                 Debug.Log("Bus: " + vehicle.GetID() + " has path and is now updating");
@@ -85,4 +81,5 @@ public class VehicleManager
             return null;
         }
     }
+
 }

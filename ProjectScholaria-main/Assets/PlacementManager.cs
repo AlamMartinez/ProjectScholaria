@@ -73,6 +73,16 @@ public class PlacementManager
                 }
                 Debug.Log("Missing road for bus stop at (" + position.x + ", " + position.y + ")");
                 break;
+            case CROSS_WALK:
+                if (grid.GetCell(position.x, position.y).GetType() == Cell.EMPTY)
+                {
+                    //gameManager.DemolishRoad(position);
+                    gameManager.AddCrossWalk(position.x, position.y);
+                    //busStops.Add(grid.GetCell(position.x, position.y));
+                    return;
+                }
+                Debug.Log("Missing road for bus stop at (" + position.x + ", " + position.y + ")");
+                break;
 
         }
     }
@@ -106,6 +116,10 @@ public class PlacementManager
                 }
                 gameManager.DemolishBusStop(position);
                 break;
+            case Cell.CROSS_WALK:
+                gameManager.DemolishCrossWalk(position);
+                break;
+            
         }
     }
     public int GetPlacementMode() { return placementMode; }
@@ -141,4 +155,5 @@ public class PlacementManager
     public const int PATHING = 2;
     public const int ROAD = 3;
     public const int BUS_STOP = 4;
+    public const int CROSS_WALK = 5;
 }

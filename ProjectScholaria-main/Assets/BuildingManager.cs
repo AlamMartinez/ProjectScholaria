@@ -134,4 +134,9 @@ public class BuildingManager
     {
         currentTemplate = (currentTemplate + amount + templates.Count) % templates.Count;
     }
+
+    public List<Building> GetListOfBuildings()
+    {
+        return buildings;
+    }
 }

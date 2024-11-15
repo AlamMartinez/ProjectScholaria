@@ -2045,6 +2045,7 @@ MonoBehaviour:
   roadPefab: {fileID: 2795862450608983600, guid: 4cf80877d1ab79e4086538795f0ed312, type: 3}
   busStopPrefab: {fileID: 6655451786145456620, guid: 0926064e8cc54b9449d9a78989bedc42, type: 3}
   busVehiclePrefab: {fileID: 744887826789525860, guid: 9edc2c7818e701a4a92c8912df87613d, type: 3}
+  crossWalkPrefab: {fileID: 7712035524381147673, guid: a3a54f31abb9e6b40b1eaed6702a5996, type: 3}
   ground: {fileID: 0}
   buildingDisplay: {fileID: 1156347636}
   modeDisplay: {fileID: 2098830243}
@@ -3355,6 +3356,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098830241}
   m_CullTransparentMesh: 1
+--- !u!1001 &4158059320425566089
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2298856110183821953, guid: a3a54f31abb9e6b40b1eaed6702a5996, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.556
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298856110183821953, guid: a3a54f31abb9e6b40b1eaed6702a5996, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298856110183821953, guid: a3a54f31abb9e6b40b1eaed6702a5996, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.88
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298856110183821953, guid: a3a54f31abb9e6b40b1eaed6702a5996, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298856110183821953, guid: a3a54f31abb9e6b40b1eaed6702a5996, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298856110183821953, guid: a3a54f31abb9e6b40b1eaed6702a5996, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298856110183821953, guid: a3a54f31abb9e6b40b1eaed6702a5996, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298856110183821953, guid: a3a54f31abb9e6b40b1eaed6702a5996, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298856110183821953, guid: a3a54f31abb9e6b40b1eaed6702a5996, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298856110183821953, guid: a3a54f31abb9e6b40b1eaed6702a5996, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7712035524381147673, guid: a3a54f31abb9e6b40b1eaed6702a5996, type: 3}
+      propertyPath: m_Name
+      value: Cube (2)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a3a54f31abb9e6b40b1eaed6702a5996, type: 3}
 --- !u!1001 &4690009731371834404
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3553,3 +3611,4 @@ SceneRoots:
   - {fileID: 850681065}
   - {fileID: 4690009731371834404}
   - {fileID: 8645641026905895209}
+  - {fileID: 4158059320425566089}

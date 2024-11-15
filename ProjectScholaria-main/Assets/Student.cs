@@ -12,6 +12,7 @@ public class Student
     private List<Cell> path;
     private float travel;
     private GameObject gameObject;
+    private int happiness;
 
     public Student(int id)
     {
@@ -60,6 +61,11 @@ public class Student
             //Otherwise, check all neighbors
             foreach (Cell neighbor in current.GetNeighbors())
             {
+                if (neighbor.IsRoad())
+                {
+                    continue;
+                }
+
                 //Only allow students to enter/exit buildings through entrances
                 if(current.IsBuilding() == neighbor.IsBuilding() || current.IsEntrance() || neighbor.IsEntrance())
                 {
@@ -68,7 +74,7 @@ public class Student
                     //If moving into/out from a building, add an additional penalty
                     if(current.IsBuilding() != neighbor.IsBuilding())
                     {
-                        dist += 5;
+                        dist += 50;
                     }
                     if(dist < (distMap.ContainsKey(neighbor) ? distMap[neighbor] : int.MaxValue))
                     {
@@ -189,4 +195,20 @@ public class Student
         }
         Debug.Log(output);
     }
+
+    public int GetHappiness()
+    {
+        return happiness;
+    }
+
+    public void IncreaseHappiness(int amount)
+    {
+        happiness = Mathf.Min(happiness + amount, 100);
+    }
+
+    public void DecreaseHappiness(int amount)
+    {
+        happiness = Mathf.Max(happiness - amount, 0);
+    }
+
 }
