@@ -10,7 +10,9 @@ using TMPro;
 public struct UI_State
 {
     int currentMode;
-    bool confirmationConext = false;
+    public UI_State(int mode) {
+        this.currentMode =  mode;
+    }
 }
 
 public class UILayer : MonoBehaviour
@@ -21,6 +23,11 @@ public class UILayer : MonoBehaviour
     public TextMeshProUGUI infoDisplay;
     private UI_State uiState;
 
+
+    public void OnSavePress()
+    {
+        gameManager.SaveGame();
+    }
 
     public void OnResetPress()
     {

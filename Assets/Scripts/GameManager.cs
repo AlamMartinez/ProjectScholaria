@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public BuildingManager buildingManager;
     public PlacementManager placementManager;
     public InputManager inputManager;
+    public SaveManager saveManager;
     public UILayer uiLayer;
 
     private Vector2Int cursorPosition;
@@ -47,6 +48,7 @@ public class GameManager : MonoBehaviour
         grid = new Grid(20, 20);
         studentManager = new StudentManager(this,grid);
         buildingManager = new BuildingManager(this, grid);
+        saveManager = new SaveManager(this);
         placementManager = new PlacementManager(this, buildingManager, grid);
         mode = NONE;
         gameObjects = new List<GameObject>();
@@ -298,6 +300,10 @@ public class GameManager : MonoBehaviour
     }
     public GameState GetGameState() { return gameState; }
     public Building GetSelectedBuilding() { return selectedBuilding; }
+    public void SaveGame()
+    {
+        saveManager.SerializeToSaveFile(buildingManager);
+    }
 
     public const int NONE = 0;
     public const int PLACEMENT = 1;
