@@ -10,6 +10,8 @@ public class PlacementManager
     private BuildingManager buildingManager;
     private Grid grid;
     private int placementMode;
+    private List<Cell> busStops;
+
 
     public PlacementManager(GameManager gameManager, BuildingManager buildingManager, Grid grid)
     {
@@ -17,6 +19,7 @@ public class PlacementManager
         this.buildingManager = buildingManager;
         this.grid = grid;
         placementMode = NONE;
+        busStops = new List<Cell>();
     }
     /// <summary>
     /// Will attempt to place a Building or path (depending on placementMode) at the given
@@ -53,6 +56,34 @@ public class PlacementManager
                 }
                 gameManager.AddPath(position.x, position.y);
                 break;
+            case ROAD:
+                if (grid.GetCell(position.x, position.y).GetType() != Cell.EMPTY)
+                {
+                    Debug.Log("Cannot place road at (" + position.x + ", " + position.y + ")");
+                    return;
+                }
+                gameManager.AddRoad(position.x, position.y);
+                break;
+            case BUS_STOP:
+                if (grid.GetCell(position.x, position.y).GetType() == Cell.ROAD)
+                {
+                    gameManager.DemolishRoad(position);
+                    gameManager.AddBusStop(position.x, position.y);
+                    busStops.Add(grid.GetCell(position.x, position.y));
+                    return;
+                }
+                Debug.Log("Missing road for bus stop at (" + position.x + ", " + position.y + ")");
+                break;
+            case CROSS_WALK:
+                if (grid.GetCell(position.x, position.y).GetType() == Cell.EMPTY)
+                {
+                    //gameManager.DemolishRoad(position);
+                    gameManager.AddCrossWalk(position.x, position.y);
+                    //busStops.Add(grid.GetCell(position.x, position.y));
+                    return;
+                }
+                Debug.Log("Missing road for bus stop at (" + position.x + ", " + position.y + ")");
+                break;
         }
     }
     /// <summary>
@@ -69,14 +100,48 @@ public class PlacementManager
             case Cell.PATH:
                 gameManager.DemolishPath(position);
                 break;
+            case Cell.ROAD:
+                gameManager.DemolishRoad(position);
+                break;
+            case Cell.BUS_STOP:
+                for (int i = 0; i < busStops.Count; i++)
+                {
+                    if (grid.GetCell(position.x, position.y).GetX() == busStops[i].GetX() &&
+                        grid.GetCell(position.x, position.y).GetY() == busStops[i].GetY())
+                    {
+                        busStops.RemoveAt(i);
+                        break;
+                    }
+                }
+                gameManager.DemolishBusStop(position);
+                break;
+            case Cell.CROSS_WALK:
+                gameManager.DemolishCrossWalk(position);
+                break;
         }
     }
     public int GetPlacementMode() { return placementMode; }
+    public int GetBusStopCount() { return busStops.Count; }
+
+    public Cell GetRandomBusStop()
+    {
+        if (busStops.Count > 0)
+        {
+            return busStops[Random.Range(0, busStops.Count)];
+        }
+        return null;
+    }
+
+    public List<Cell> GetBusStops()
+    {
+        return busStops;
+    }
+
     public void SetPlacementMode(int mode) { placementMode = mode; }
     //Cycle between placement variants, i.e. building blueprints
     public void Cycle(int amount)
     {
-        switch(placementMode)
+        switch (placementMode)
         {
             case BUILDING:
                 buildingManager.IncrementBuildingSelection(amount);
@@ -86,4 +151,7 @@ public class PlacementManager
     public const int NONE = 0;
     public const int BUILDING = 1;
     public const int PATHING = 2;
+    public const int ROAD = 3;
+    public const int BUS_STOP = 4;
+    public const int CROSS_WALK = 5;
 }

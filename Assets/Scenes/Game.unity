@@ -5802,6 +5802,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1996203894}
   - component: {fileID: 1996203893}
+  - component: {fileID: 1996203895}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -5828,9 +5829,13 @@ MonoBehaviour:
   cursor: {fileID: 819151423}
   cursorPrefab: {fileID: -2432090755550338912, guid: aa00dad73bf91bd488c41c8f1ca25e70, type: 3}
   pathPrefab: {fileID: 7260322706096682168, guid: 60aa4c583b2bd6046a83364abf2ef1b9, type: 3}
+  roadPefab: {fileID: 2795862450608983600, guid: d648fb691d0bfad4ea2b86ce6cc50e8c, type: 3}
+  busStopPrefab: {fileID: 919132149155446097, guid: f613876e98ceef44bbb38eb7fc6c9e25, type: 3}
+  busVehiclePrefab: {fileID: 744887826789525860, guid: 1721b076edd7ba34e89ca2ccdaccde23, type: 3}
+  crossWalkPrefab: {fileID: 7712035524381147673, guid: b3e0c5ae932de9f408b0e75d76c32c30, type: 3}
   ground: {fileID: 0}
   buildingDisplay: {fileID: 1156347636}
-  modeDisplay: {fileID: 1065197745}
+  modeDisplay: {fileID: 2098830243}
 --- !u!4 &1996203894
 Transform:
   m_ObjectHideFlags: 0
@@ -5846,6 +5851,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1043432131}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1996203895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1996203892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa1b6200f7dec089a881f5d093a850c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 1996203893}
 --- !u!1 &2075909502
 GameObject:
   m_ObjectHideFlags: 0

@@ -66,6 +66,46 @@ public class InputManager : MonoBehaviour
                 gameManager.GetPlacementManager().SetPlacementMode(PlacementManager.PATHING);
             }
         }
+        if (Input.GetButtonDown("RoadMode"))
+        {
+            if (gameManager.GetMode() == GameManager.PLACEMENT && gameManager.GetPlacementManager().GetPlacementMode() == PlacementManager.PATHING)
+            {
+                gameManager.SetMode(GameManager.NONE);
+            }
+            else
+            {
+                gameManager.SetMode(GameManager.PLACEMENT);
+                gameManager.GetPlacementManager().SetPlacementMode(PlacementManager.ROAD);
+            }
+        }
+        if (Input.GetButtonDown("CrossWalkMode"))
+        {
+            if (gameManager.GetMode() == GameManager.PLACEMENT && gameManager.GetPlacementManager().GetPlacementMode() == PlacementManager.PATHING)
+            {
+                gameManager.SetMode(GameManager.NONE);
+            }
+            else
+            {
+                gameManager.SetMode(GameManager.PLACEMENT);
+                gameManager.GetPlacementManager().SetPlacementMode(PlacementManager.CROSS_WALK);
+            }
+        }
+        if (Input.GetButtonDown("BusStopMode"))
+        {
+            if (gameManager.GetMode() == GameManager.PLACEMENT && gameManager.GetPlacementManager().GetPlacementMode() == PlacementManager.PATHING)
+            {
+                gameManager.SetMode(GameManager.NONE);
+            }
+            else
+            {
+                gameManager.SetMode(GameManager.PLACEMENT);
+                gameManager.GetPlacementManager().SetPlacementMode(PlacementManager.BUS_STOP);
+            }
+        }
+        if (Input.GetButtonDown("spawnBus"))
+        {
+            gameManager.AddRandomBus();
+        }
         if (Input.GetButtonDown("DemolishMode"))
         {
             if (gameManager.GetMode() == GameManager.DEMOLITION)

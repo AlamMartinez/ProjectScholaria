@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using UnityEngine.UI;
 using TMPro;
+using System.Security.Cryptography;
+
 public struct GameState {
     public int numStudents;
     public string selectionContext;
@@ -25,18 +27,29 @@ public class GameManager : MonoBehaviour
     public StudentManager studentManager;
     public BuildingManager buildingManager;
     public PlacementManager placementManager;
+    public VehicleManager vehicleManager;
     public InputManager inputManager;
     public SaveManager saveManager;
     public UILayer uiLayer;
-
+    public ScoreSystem scoreSystem;
     private Vector2Int cursorPosition;
     public int mode;
+
+    private int currExp;
+    private double currHappiness;
+    private int currLevel;
+    private int currScore;
+
 
     public GameState gameState;
     private List<GameObject> gameObjects;
     public GameObject cursor;
     public Mesh cursorPrefab;
     public GameObject pathPrefab;
+    public GameObject roadPefab;
+    public GameObject busStopPrefab;
+    public GameObject busVehiclePrefab;
+    public GameObject crossWalkPrefab;
     public GameObject ground;
 
     public Building selectedBuilding;
@@ -51,6 +64,8 @@ public class GameManager : MonoBehaviour
         buildingManager = new BuildingManager(this, grid);
         saveManager = new SaveManager(this);
         placementManager = new PlacementManager(this, buildingManager, grid);
+        scoreSystem = new ScoreSystem(this, placementManager);
+        vehicleManager = new VehicleManager(this, grid);
         mode = NONE;
         gameObjects = new List<GameObject>();
         gameState = new GameState(0);
@@ -86,8 +101,21 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         studentManager.Update();
+        vehicleManager.Update();
+
+        scoreSystem.SetStudentList(studentManager.GetListOfStudents());
+        scoreSystem.SetBuildingList(buildingManager.GetBuildings());
+        scoreSystem.UpdateExp();
+
+        currHappiness = scoreSystem.CalOverallHappiness();
+        currLevel = scoreSystem.GetLevel();
+        currExp = scoreSystem.GetExp();
+        currScore = scoreSystem.CalcScore();
+
+        Debug.Log("currHappiness: " + currHappiness + "\ncurrLevel: " + currLevel +
+            "\ncurrExp: " + currExp + "\ncurrScore: " + currScore);
         //Update selected building UI
-        if(selectedBuilding != null)
+        if (selectedBuilding != null)
         {
             gameState.selectionContext = "Selected Building: " + selectedBuilding.GetName() /*+ "\nDesignation: " + selectedBuilding.GetType() + "\nVisits: " + selectedBuilding.GetVisits()*/;
         }
@@ -113,6 +141,15 @@ public class GameManager : MonoBehaviour
                         break;
                     case PlacementManager.PATHING:
                         modeDisplay.text = "Mode: Placing Pathways";
+                        break;
+                    case PlacementManager.ROAD:
+                        modeDisplay.text = "Mode: Placing Roads";
+                        break;
+                    case PlacementManager.BUS_STOP:
+                        modeDisplay.text = "Mode: Adding Bus Stops";
+                        break;
+                    case PlacementManager.CROSS_WALK:
+                        modeDisplay.text = "Mode: Adding Cross Walks";
                         break;
                 }
                 break;
@@ -278,6 +315,45 @@ public class GameManager : MonoBehaviour
         path.transform.position = new Vector3(x, 0, y);
         gameObjects.Add(path);
     }
+
+    public void AddRoad(int x, int y)
+    {
+        grid.GetCell(x, y).SetType(Cell.ROAD);
+        GameObject road = Instantiate(roadPefab);
+        road.name = "road" + x + "," + y;
+        road.transform.position = new Vector3(x, 0, y);
+        gameObjects.Add(road);
+    }
+
+    public void AddBusStop(int x, int y)
+    {
+        grid.GetCell(x, y).SetType(Cell.BUS_STOP);
+        GameObject busStop = Instantiate(busStopPrefab);
+        busStop.name = "busStop" + x + "," + y;
+        busStop.transform.position = new Vector3(x, 0, y);
+        gameObjects.Add(busStop);
+    }
+    public void AddCrossWalk(int x, int y)
+    {
+        grid.GetCell(x, y).SetType(Cell.CROSS_WALK);
+        GameObject road = Instantiate(crossWalkPrefab);
+        road.name = "crossWalk" + x + "," + y;
+        road.transform.position = new Vector3(x, 0, y);
+        gameObjects.Add(road);
+    }
+
+    public void AddRandomBus()
+    {
+        Debug.Log("About to start adding a random bus");
+        GameObject bus = vehicleManager.CreateRandomBus(busVehiclePrefab);
+
+        if (bus != null)
+        {
+            Debug.Log("Bus object was not NULL");
+            gameObjects.Add(bus);
+        }
+    }
+
     public void DemolishPath(Vector2Int position)
     {
         //Reset cell type and delete gameObject
@@ -291,6 +367,51 @@ public class GameManager : MonoBehaviour
             }
         }
         gameObjects.RemoveAll(obj => obj.name == ("path" + position.x + "," + position.y));
+    }
+
+    public void DemolishRoad(Vector2Int position)
+    {
+        //Reset cell type and delete gameObject
+        grid.GetCell(position.x, position.y).SetType(Cell.EMPTY);
+        foreach (GameObject obj in gameObjects)
+        {
+            if (obj.name == ("road" + position.x + "," + position.y))
+            {
+                Debug.Log("demolishing");
+                Destroy(obj);
+            }
+        }
+        gameObjects.RemoveAll(obj => obj.name == ("road" + position.x + "," + position.y));
+    }
+
+    public void DemolishBusStop(Vector2Int position)
+    {
+        //Reset cell type and delete gameObject
+        grid.GetCell(position.x, position.y).SetType(Cell.EMPTY);
+        foreach (GameObject obj in gameObjects)
+        {
+            if (obj.name == ("busStop" + position.x + "," + position.y))
+            {
+                Debug.Log("demolishing");
+                Destroy(obj);
+            }
+        }
+        gameObjects.RemoveAll(obj => obj.name == ("busStop" + position.x + "," + position.y));
+    }
+
+    public void DemolishCrossWalk(Vector2Int position)
+    {
+        //Reset cell type and delete gameObject
+        grid.GetCell(position.x, position.y).SetType(Cell.EMPTY);
+        foreach (GameObject obj in gameObjects)
+        {
+            if (obj.name == ("crossWalk" + position.x + "," + position.y))
+            {
+                Debug.Log("demolishing");
+                Destroy(obj);
+            }
+        }
+        gameObjects.RemoveAll(obj => obj.name == ("crossWalk" + position.x + "," + position.y));
     }
     /// <summary>
     /// Used to clear the GameManager's currently selected building
