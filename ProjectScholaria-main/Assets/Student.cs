@@ -18,6 +18,7 @@ public class Student
     {
         this.id = id;
         travel = 0;
+        happiness = 70;
     }
     /// <summary>
     /// Populates the path list with Cells which represent a path going between the Student's
