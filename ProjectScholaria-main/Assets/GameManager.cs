@@ -18,7 +18,11 @@ public class GameManager : MonoBehaviour
     public VehicleManager vehicleManager;
     public InputManager inputManager;
     public ScoreSystem scoreSystem;
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> eb8537b51bb4552ca7d2a9fb9f65c3a90f640b6e
     private Vector2Int cursorPosition;
     private int mode;
 
@@ -87,6 +91,7 @@ public class GameManager : MonoBehaviour
         studentManager.Update();
         vehicleManager.Update();
 
+<<<<<<< HEAD
         scoreSystem.SetStudentList(studentManager.GetListOfStudents());
         scoreSystem.SetBuildingList(buildingManager.GetListOfBuildings());
 
@@ -95,6 +100,16 @@ public class GameManager : MonoBehaviour
         currExp = scoreSystem.GetExp();
         currScore = scoreSystem.CalcScore();
 
+=======
+        //scoreSystem.SetStudentList(studentManager.GetListOfStudents());
+        //scoreSystem.SetBuildingList(buildingManager.GetListOfBuildings());
+
+        //currhappiness = scoreSystem.CalOverallHappiness();
+        //currLevel = scoreSystem.GetLevel();
+        //currExp = scoreSystem.GetExp();
+        //currScore = scoreSystem.CalcScore();
+        
+>>>>>>> eb8537b51bb4552ca7d2a9fb9f65c3a90f640b6e
         //Update selected building UI
         if (selectedBuilding != null)
         {

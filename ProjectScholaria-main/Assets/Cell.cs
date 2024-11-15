@@ -86,11 +86,18 @@ public class Cell
         {
             case EMPTY: return 30;
             case PATH: return 10;
+<<<<<<< HEAD
             case CROSS_WALK: return 5;
             case ROAD: return 5;
             case BUS_STOP: return 5;
             case BUILDING: return 10;
             default: return 50;
+=======
+            case ROAD: return 5;
+            case BUS_STOP: return 5;
+            case BUILDING: return 10;
+            default: return 5;
+>>>>>>> eb8537b51bb4552ca7d2a9fb9f65c3a90f640b6e
         }
     }
     public override string ToString()
