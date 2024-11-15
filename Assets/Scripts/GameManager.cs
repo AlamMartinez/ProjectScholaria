@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using UnityEngine.UI;
 using TMPro;
@@ -302,9 +303,16 @@ public class GameManager : MonoBehaviour
     public Building GetSelectedBuilding() { return selectedBuilding; }
     public void SaveGame()
     {
-        saveManager.SerializeToSaveFile(buildingManager);
+        saveManager.SerializeToSaveFile();
     }
 
+    public void LoadGame()
+    {
+        // reset the scene first
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        saveManager.LoadFromSaveFile(this);
+    }
     public const int NONE = 0;
     public const int PLACEMENT = 1;
     public const int DEMOLITION = 2;

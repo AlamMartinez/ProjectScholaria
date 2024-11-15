@@ -29,6 +29,11 @@ public class UILayer : MonoBehaviour
         gameManager.SaveGame();
     }
 
+    public void OnLoadPress()
+    {
+        gameManager.LoadGame();
+    }
+
     public void OnResetPress()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);

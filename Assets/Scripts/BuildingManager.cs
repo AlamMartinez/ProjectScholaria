@@ -79,6 +79,41 @@ public class BuildingManager
     {
         Building building = new Building(buildingIndex++);
         building.SetName(template.GetName());
+        building.SetBoardPos(position);
+        building.SetTemplate(this.currentTemplate);
+        for (int x = 0; x < template.GetWidth(); x++)
+        {
+            for (int y = 0; y < template.GetHeight(); y++)
+            {
+                if (template.GetCell(x, y) > 0)
+                {
+                    //Set cell to belong to new building
+                    grid.SetCellBuilding(position.x + x, position.y + y, building);
+                    //Add cell to building's list of contained cells
+                    building.AddCell(grid.GetCell(position.x + x, position.y + y));
+                }
+                if (template.GetCell(x, y) == 2)//If the cell is an entrance, mark it as so
+                {
+                    building.AddEntrance(grid.GetCell(position.x + x, position.y + y));
+                }
+            }
+        }
+        buildings.Add(building);
+        building.AddGameObject(gameManager.AddNewGameObject(template.GetPrefab(), position));
+        Debug.Log("Created new building: " + building);
+    }
+
+    public void ConstructBuildingFromSave(BuildingSave buildSave)
+    {
+        this.currentTemplate = buildSave.template;
+        Vector2Int position = buildSave.boardPos;
+        BuildingTemplate template = templates[this.currentTemplate];
+        Building building = new Building(buildingIndex++);
+        building.SetName(buildSave.name);
+        building.SetVisits(buildSave.visits);
+        building.SetBoardPos(buildSave.boardPos);
+        building.SetTemplate(buildSave.template);
+        building.SetType(buildSave.type);
         for (int x = 0; x < template.GetWidth(); x++)
         {
             for (int y = 0; y < template.GetHeight(); y++)
@@ -133,6 +168,11 @@ public class BuildingManager
     public void IncrementBuildingSelection(int amount)
     {
         currentTemplate = (currentTemplate + amount + templates.Count) % templates.Count;
+    }
+
+    public void SetBuildingSelection(int selection)
+    {
+        currentTemplate = selection;
     }
 
     public List<Building> GetBuildings() { return buildings; }
