@@ -13,6 +13,8 @@ public class Building
     private GameObject gameObject;
     private int type;
     private string name;
+    private Vector2Int boardPos;
+    private int templateIndex;
     private int visits;
     /// <summary>
     /// Creates a new building with given ID
@@ -24,6 +26,8 @@ public class Building
         entrances = new List<Cell>();
         type = Random.Range(1, 4);
         visits = 0;
+        templateIndex = 0;
+        boardPos = new Vector2Int(0, 0);
     }
     /// <summary>
     /// Adds the given Cell to the Building's list of included cells
@@ -74,7 +78,7 @@ public class Building
     }
     public int GetID() { return id; }
     /// <summary>
-    /// Returns a random entrance included within the Building. 
+    /// Returns a random entrance included within the Building.
     /// </summary>
     public Cell GetRandomEntrance() { return entrances[Random.Range(0, entrances.Count)]; }
     public override bool Equals(object obj)
@@ -118,6 +122,15 @@ public class Building
     {
         return visits;
     }
+
+    public void SetType(int type) { this.type = type; }
+    public int GetTypeID() { return this.type; }
+    public void SetVisits(int visits) { this.visits = visits; }
+
+    public void SetBoardPos(Vector2Int pos) { this.boardPos = pos; }
+    public Vector2Int GetBoardPos() { return boardPos; }
+    public void SetTemplate(int index) { this.templateIndex = index; }
+    public int GetTemplate() { return templateIndex; }
     public const int TYPE_NONE = 0;
     public const int TYPE_DORMITORY = 1;
     public const int TYPE_LECTURE = 2;

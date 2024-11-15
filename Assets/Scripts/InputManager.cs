@@ -48,7 +48,7 @@ public class InputManager : MonoBehaviour
             {
                 gameManager.SetMode(GameManager.NONE);
             }
-            else 
+            else
             {
                 gameManager.SetMode(GameManager.PLACEMENT);
                 gameManager.GetPlacementManager().SetPlacementMode(PlacementManager.BUILDING);
@@ -100,6 +100,11 @@ public class InputManager : MonoBehaviour
         if(Input.GetKeyDown("r"))
         {
             SceneManager.LoadScene(1);
+        }
+        if(Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Return))
+        {
+            gameManager.SetMode(GameManager.NONE);
+            gameManager.ClearSelectedBuilding();
         }
     }
 }

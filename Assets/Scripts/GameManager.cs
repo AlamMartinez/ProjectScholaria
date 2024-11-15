@@ -1,13 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using UnityEngine.UI;
 using TMPro;
+public struct GameState {
+    public int numStudents;
+    public string selectionContext;
+
+    public GameState(int value) {
+        this.numStudents = value;
+        this.selectionContext = "";
+    }
+}
 /// <summary>
 /// The GameManager is responsible for coordinating between all other managers, as well as for intializing
 /// the game scene on startup.
 /// </summary>
+
 public class GameManager : MonoBehaviour
 {
     public Grid grid;
@@ -15,10 +26,13 @@ public class GameManager : MonoBehaviour
     public BuildingManager buildingManager;
     public PlacementManager placementManager;
     public InputManager inputManager;
+    public SaveManager saveManager;
+    public UILayer uiLayer;
 
     private Vector2Int cursorPosition;
-    private int mode;
+    public int mode;
 
+    public GameState gameState;
     private List<GameObject> gameObjects;
     public GameObject cursor;
     public Mesh cursorPrefab;
@@ -35,9 +49,11 @@ public class GameManager : MonoBehaviour
         grid = new Grid(20, 20);
         studentManager = new StudentManager(this,grid);
         buildingManager = new BuildingManager(this, grid);
+        saveManager = new SaveManager(this);
         placementManager = new PlacementManager(this, buildingManager, grid);
         mode = NONE;
         gameObjects = new List<GameObject>();
+        gameState = new GameState(0);
 
         //Set up ground plane
         ground = new GameObject("Ground");
@@ -66,7 +82,6 @@ public class GameManager : MonoBehaviour
         MeshCollider collider = ground.AddComponent<MeshCollider>();
         collider.sharedMesh = mesh;
         ground.AddComponent<MeshCollider>();
-
     }
     void Update()
     {
@@ -74,15 +89,15 @@ public class GameManager : MonoBehaviour
         //Update selected building UI
         if(selectedBuilding != null)
         {
-            buildingDisplay.text = "Selected Building: " + selectedBuilding.GetName() + "\nDesignation: " + selectedBuilding.GetType() + "\nVisits: " + selectedBuilding.GetVisits();
+            gameState.selectionContext = "Selected Building: " + selectedBuilding.GetName() /*+ "\nDesignation: " + selectedBuilding.GetType() + "\nVisits: " + selectedBuilding.GetVisits()*/;
         }
         else if (buildingManager.GetCurrentTemplate() != null && mode == PLACEMENT && placementManager.GetPlacementMode() == PlacementManager.BUILDING)
         {
-            buildingDisplay.text = "Selected Building: " + buildingManager.GetCurrentTemplate().GetName();
+            gameState.selectionContext = "Selected Building: " + buildingManager.GetCurrentTemplate().GetName();
         }
         else
         {
-            buildingDisplay.text = "";
+            gameState.selectionContext = "";
         }
         //Update mode UI
         switch(mode)
@@ -251,6 +266,7 @@ public class GameManager : MonoBehaviour
         if(gameObject != null)
         {
             gameObjects.Add(gameObject);
+            gameState.numStudents++;
         }
     }
     // TODO: Create Path/RoadManager class to handle the placement and operations of roads and paths
@@ -282,6 +298,26 @@ public class GameManager : MonoBehaviour
     public void ClearSelectedBuilding()
     {
         selectedBuilding = null;
+    }
+    public GameState GetGameState() { return gameState; }
+    public List<GameObject> GetGameObjects() { return gameObjects; }
+    public Building GetSelectedBuilding() { return selectedBuilding; }
+    public void SaveGame()
+    {
+        saveManager.SerializeToSaveFile();
+    }
+
+    public void LoadGame()
+    {
+        // reset the scene first
+        //ResetGame();
+
+        saveManager.LoadFromSaveFile();
+    }
+
+    public void ResetGame()
+    {
+        SceneManager.LoadScene(1);
     }
     public const int NONE = 0;
     public const int PLACEMENT = 1;
