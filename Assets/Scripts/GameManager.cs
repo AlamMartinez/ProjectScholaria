@@ -300,6 +300,7 @@ public class GameManager : MonoBehaviour
         selectedBuilding = null;
     }
     public GameState GetGameState() { return gameState; }
+    public List<GameObject> GetGameObjects() { return gameObjects; }
     public Building GetSelectedBuilding() { return selectedBuilding; }
     public void SaveGame()
     {
@@ -309,9 +310,14 @@ public class GameManager : MonoBehaviour
     public void LoadGame()
     {
         // reset the scene first
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        //ResetGame();
 
-        saveManager.LoadFromSaveFile(this);
+        saveManager.LoadFromSaveFile();
+    }
+
+    public void ResetGame()
+    {
+        SceneManager.LoadScene(1);
     }
     public const int NONE = 0;
     public const int PLACEMENT = 1;

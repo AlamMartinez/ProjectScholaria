@@ -6,17 +6,21 @@ using UnityEngine;
 public class SaveManager : MonoBehaviour
 {
     private SaveData _saveData;
+    private GameManager _gameMgr;
 
     public SaveManager(GameManager gm)
     {
+        this._gameMgr = gm;
         this._saveData = new SaveData();
         this._saveData.buildings = new BuildingSaves(gm);
+        this._saveData.paths = new PathSaves(gm);
     }
 
     [System.Serializable]
     public struct SaveData
     {
         public BuildingSaves buildings;
+        public PathSaves paths;
     }
 
     public static string GetSaveFileName()
@@ -29,12 +33,13 @@ public class SaveManager : MonoBehaviour
     {
         Debug.Log("Copying game state");
         _saveData.buildings.Save();
+        _saveData.paths.Save();
 
         Debug.Log("Writing to save file");
         File.WriteAllText(GetSaveFileName(), JsonUtility.ToJson(_saveData, true));
     }
 
-    public static void LoadFromSaveFile(GameManager gm)
+    public void LoadFromSaveFile()
     {
         string saveFileName = GetSaveFileName();
         Debug.Log("Atempting to load from save file: " + saveFileName);
@@ -45,8 +50,43 @@ public class SaveManager : MonoBehaviour
         //    Debug.LogError("Something wrong with reading from save file");
         //}
 
-        _saveData.buildings.buildingManager = gm.GetBuildingManager();
+        _saveData.buildings.buildingManager = _gameMgr.GetBuildingManager();
+        _saveData.paths.gm = _gameMgr;
         _saveData.buildings.Load();
+        _saveData.paths.Load();
+    }
+}
+[System.Serializable]
+public class PathSaves
+{
+    public List<PathSave> pathSaves;
+    public GameManager gm;
+    public PathSaves(GameManager gm) {
+        this.gm = gm;
+        this.pathSaves = new List<PathSave>();
+    }
+
+    public void Save()
+    {
+        foreach(GameObject path in gm.GetGameObjects())
+        {
+            if(path.tag == "Path")
+            {
+                Debug.Log("Saved path");
+                PathSave pathSave = new PathSave();
+                pathSave.pos = new Vector2Int((int)path.transform.position.x, (int)path.transform.position.z);
+                pathSaves.Add(pathSave);
+            }
+        }
+    }
+
+    public void Load()
+    {
+        foreach (PathSave pathSave in pathSaves)
+        {
+            gm.AddPath(pathSave.pos.x, pathSave.pos.y);
+            Debug.Log("Loaded path");
+        }
     }
 }
 
@@ -85,6 +125,12 @@ public class BuildingSaves
             Debug.Log("Loaded building");
         }
     }
+}
+
+[System.Serializable]
+public struct PathSave
+{
+    public Vector2Int pos;
 }
 
 [System.Serializable]

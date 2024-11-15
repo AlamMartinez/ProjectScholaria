@@ -36,7 +36,7 @@ public class UILayer : MonoBehaviour
 
     public void OnResetPress()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        gameManager.ResetGame();
     }
 
     public void OnUnpausePress() {
