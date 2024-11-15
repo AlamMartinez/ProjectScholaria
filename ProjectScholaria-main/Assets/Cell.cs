@@ -79,11 +79,11 @@ public class Cell
     {
         switch(type)
         {
-            case EMPTY: return 3;
-            case PATH:
-            case ROAD:
-            case BUS_STOP:
-            case BUILDING: return 1;
+            case EMPTY: return 30;
+            case PATH: return 10;
+            case ROAD: return 5;
+            case BUS_STOP: return 5;
+            case BUILDING: return 10;
             default: return 5;
         }
     }

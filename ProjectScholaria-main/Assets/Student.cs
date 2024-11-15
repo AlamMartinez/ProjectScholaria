@@ -68,7 +68,7 @@ public class Student
                     //If moving into/out from a building, add an additional penalty
                     if(current.IsBuilding() != neighbor.IsBuilding())
                     {
-                        dist += 5;
+                        dist += 50;
                     }
                     if(dist < (distMap.ContainsKey(neighbor) ? distMap[neighbor] : int.MaxValue))
                     {

@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Globalization;
 using System.IO;
+
 /// <summary>
 /// The BuildingManager is responsible for the placement, removal, and operation of Buildings.
 /// </summary>
@@ -133,5 +135,10 @@ public class BuildingManager
     public void IncrementBuildingSelection(int amount)
     {
         currentTemplate = (currentTemplate + amount + templates.Count) % templates.Count;
+    }
+
+    public List<Building> GetListOfBuildings()
+    {
+        return buildings;
     }
 }

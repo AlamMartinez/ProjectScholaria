@@ -17,9 +17,15 @@ public class GameManager : MonoBehaviour
     public PlacementManager placementManager;
     public VehicleManager vehicleManager;
     public InputManager inputManager;
+    public ScoreSystem scoreSystem;
     
     private Vector2Int cursorPosition;
     private int mode;
+
+    private int currExp;
+    private double currhappiness;
+    private int currLevel;
+    private int currScore;
 
     private List<GameObject> gameObjects;
     public GameObject cursor;
@@ -78,6 +84,15 @@ public class GameManager : MonoBehaviour
     {
         studentManager.Update();
         vehicleManager.Update();
+
+        //scoreSystem.SetStudentList(studentManager.GetListOfStudents());
+        //scoreSystem.SetBuildingList(buildingManager.GetListOfBuildings());
+
+        //currhappiness = scoreSystem.CalOverallHappiness();
+        //currLevel = scoreSystem.GetLevel();
+        //currExp = scoreSystem.GetExp();
+        //currScore = scoreSystem.CalcScore();
+        
         //Update selected building UI
         if(selectedBuilding != null)
         {
