@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,15 +11,60 @@ public class Student
     private Cell position;
     private Building destination;
     private List<Cell> path;
+
     private float travel;
     private GameObject gameObject;
-    private int happiness;
 
+    private int happiness;
+    private int scheduleIndex;
+    private List<Building> schedule;
 
     public Student(int id)
     {
         this.id = id;
         travel = 0;
+        schedule = new List<Building>();
+        scheduleIndex = 0;
+    }
+    /// <summary>
+    /// Generates a new schedule for the student based on current building availability
+    /// </summary>
+    public void GenerateSchedule(BuildingManager bm)
+    {
+        try
+        {
+            // Find a home dorm for the student. Will serve as their starting and ending point
+            schedule.Add(bm.GetRandomAvailableOfType(Building.TYPE_DORMITORY));
+            // Find classes for the student.
+            int maxClasses = bm.GetAvailableBuildingCountOfType(Building.TYPE_LECTURE);
+            if(maxClasses <= 0)
+            {
+                throw new Exception("Could not find any non-full classes.");
+            }
+            int classCount = UnityEngine.Random.Range(1, maxClasses);
+            for(int i = 0; i < classCount; i++)
+            {
+                // TODO: Can be optimized
+                Building destination;
+                do
+                {
+                    destination = bm.GetRandomAvailableOfType(Building.TYPE_LECTURE);
+                } while (schedule.Contains(destination));
+                schedule.Add(destination);
+            }
+            // Send student home to dorm at end of schedule
+            schedule.Add(schedule[0]);
+            // Set student's starting positon to a random entrance of their dorm
+            position = schedule[0].GetRandomEntrance();
+            PrintSchedule();
+        } catch(Exception e)
+        {
+            Debug.LogError("Could not generate a schedule for student " + id + "; " + e);
+        }
+    }
+    public bool HasSchedule()
+    {
+        return schedule.Count > 0;
     }
     /// <summary>
     /// Populates the path list with Cells which represent a path going between the Student's
@@ -28,6 +74,11 @@ public class Student
     /// <param name="grid">The Grid used to calculate the path</param>
     public void CalculatePath(Grid grid)
     {
+        // Set destination to current schedule building
+        if(destination == null && scheduleIndex + 1 < schedule.Count)
+        {
+            destination = schedule[scheduleIndex + 1];
+        }
         Debug.Log("Student " + id + " is finding a path from " + position + " to building " + destination.GetID());
         path = new List<Cell>();
 
@@ -94,7 +145,7 @@ public class Student
         }
         else
         {
-            PrintPathfindingMap(grid,distMap);
+            //PrintPathfindingMap(grid,distMap);
         }
     }
     /// <summary>
@@ -108,8 +159,12 @@ public class Student
     /// Update the Student's position along the path
     /// </summary>
     /// <returns></returns>
-    public bool Update()
+    public void Update(Grid grid)
     {
+        if(path == null)
+        {
+            CalculatePath(grid);
+        }
         if(gameObject != null && path.Count > 0)
         {
             gameObject.transform.position = new Vector3(
@@ -133,11 +188,20 @@ public class Student
                 travel %= 1;
                 position = path[0];
                 path.RemoveAt(0);
-                
             }
-            return true;
         }
-        return false;
+        else
+        {
+            if(scheduleIndex + 1 < schedule.Count)
+            {
+                destination = schedule[++scheduleIndex];
+                CalculatePath(grid);
+            }
+            else
+            {
+                Debug.Log("Student " + id + " has reached the end of their schedule.");
+            }
+        }
     }
     /// <summary>
     /// Returns the current Cell the Student occupies
@@ -168,7 +232,7 @@ public class Student
     }
     public void Remove()
     {
-        Object.Destroy(gameObject);
+        UnityEngine.Object.Destroy(gameObject);
     }
     public int GetID() { return id; }
     /// <summary>
@@ -193,6 +257,15 @@ public class Student
                 }
             }
             output += "\n";
+        }
+        Debug.Log(output);
+    }
+    public void PrintSchedule()
+    {
+        Debug.Log("Student " + id + "'s schedule:");
+        string output = "";
+        foreach(Building b in schedule) {
+            output += b.ToString() + "\n";
         }
         Debug.Log(output);
     }

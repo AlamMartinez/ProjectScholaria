@@ -11,14 +11,18 @@ public class BuildingTemplate
 {
     private int id;
     private string name;
+    private int type;
+    private int capacity;
     private int[,] cells;
     private GameObject prefab;
 
-    public BuildingTemplate(int id, int width, int height, string name) 
+    public BuildingTemplate(int id, int width, int height, string name, int type, int capacity) 
     {
         this.id = id;
         cells = new int[width, height];
         this.name = name;
+        this.type = type;
+        this.capacity = capacity;
         prefab = Resources.Load<GameObject>(name);
         Debug.Log("Created new building template: " + name + ", " + width + " x " + height + ", ID: " + id);
     }
@@ -29,4 +33,6 @@ public class BuildingTemplate
     public void SetName(string name) { this.name = name; }
     public string GetName() { return this.name; }
     public GameObject GetPrefab() { return prefab; }
+    public int GetBuildingType() { return type; }
+    public int GetCapacity() { return capacity; }
 }

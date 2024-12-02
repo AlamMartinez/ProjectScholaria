@@ -23,7 +23,7 @@ public class VehicleManager
 
     public void Update()
     {
-        Debug.Log("updating vehicles...");
+        //Debug.Log("updating vehicles...");
         foreach (Vehicles vehicle in vehicles)
         {
             Debug.Log(vehicle == null);

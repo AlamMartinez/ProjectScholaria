@@ -115,7 +115,7 @@ public class BuildingSaves
             Debug.Log("Saved building");
             BuildingSave bdSave = new BuildingSave();
             bdSave.id = bd.GetID();
-            bdSave.type = bd.GetTypeID();
+            bdSave.type = bd.GetBuildingType();
             bdSave.name = bd.GetName();
             bdSave.visits = bd.GetVisits();
             bdSave.boardPos = bd.GetBoardPos();

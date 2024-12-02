@@ -103,6 +103,6 @@ public class UILayer : MonoBehaviour
         //update ui info
         infoDisplay.text = "Students: " + gameManager.GetGameState().numStudents +
             "\nCurrent Mode: " + modeText +
-            "\nSelected Building: " + gameManager.GetGameState().selectionContext;
+            "\n" + gameManager.GetGameState().selectionContext;
     }
 }

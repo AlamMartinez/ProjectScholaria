@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
     public VehicleManager vehicleManager;
     public InputManager inputManager;
     public SaveManager saveManager;
+    public TimeManager timeManager;
+    public GameEventManager gameEventManager;
     public UILayer uiLayer;
     public ScoreSystem scoreSystem;
     private Vector2Int cursorPosition;
@@ -66,6 +68,8 @@ public class GameManager : MonoBehaviour
         placementManager = new PlacementManager(this, buildingManager, grid);
         scoreSystem = new ScoreSystem(this, placementManager);
         vehicleManager = new VehicleManager(this, grid);
+        timeManager = new TimeManager(this, gameEventManager);
+        gameEventManager = new GameEventManager(this, uiLayer);
         mode = NONE;
         gameObjects = new List<GameObject>();
         gameState = new GameState(0);
@@ -112,16 +116,18 @@ public class GameManager : MonoBehaviour
         currExp = scoreSystem.GetExp();
         currScore = scoreSystem.CalcScore();
 
-        Debug.Log("currHappiness: " + currHappiness + "\ncurrLevel: " + currLevel +
-            "\ncurrExp: " + currExp + "\ncurrScore: " + currScore);
+        //Debug.Log("currHappiness: " + currHappiness + "\ncurrLevel: " + currLevel + "\ncurrExp: " + currExp + "\ncurrScore: " + currScore);
         //Update selected building UI
         if (selectedBuilding != null)
         {
-            gameState.selectionContext = "Selected Building: " + selectedBuilding.GetName() /*+ "\nDesignation: " + selectedBuilding.GetType() + "\nVisits: " + selectedBuilding.GetVisits()*/;
+            gameState.selectionContext =
+                selectedBuilding.GetName() +
+                "\n" + selectedBuilding.GetBuildingTypeString() +
+                "\n" + selectedBuilding.GetUsageString();
         }
         else if (buildingManager.GetCurrentTemplate() != null && mode == PLACEMENT && placementManager.GetPlacementMode() == PlacementManager.BUILDING)
         {
-            gameState.selectionContext = "Selected Building: " + buildingManager.GetCurrentTemplate().GetName();
+            gameState.selectionContext = "Selected Building: " + buildingManager.GetCurrentTemplate().GetName() + "\nType: ???";// + buildingManager.GetCurrentTemplate().GetBuildingTypeString();
         }
         else
         {
@@ -294,12 +300,11 @@ public class GameManager : MonoBehaviour
         }
     }
     /// <summary>
-    /// Adds a student to the game. Student will have a random starting position and destination.
-    /// Used for testing
+    /// Adds a student to the game. Student will have a random schedule.
     /// </summary>
     public void AddRandomStudent()
     {
-        GameObject gameObject = studentManager.CreateRandomStudent();
+        GameObject gameObject = studentManager.CreateStudent();
         if(gameObject != null)
         {
             gameObjects.Add(gameObject);

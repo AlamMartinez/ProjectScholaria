@@ -57,14 +57,14 @@ public class ScoreSystem
     public void UpdateExp()
     {
         int currExp = 0;
-        Debug.Log("exp of system is... " + exp);
+        //Debug.Log("exp of system is... " + exp);
         if (students.Count == 0 || buildings.Count == 0)
         {
             exp = 0;
             return;
         }
 
-        Debug.Log("students size is... " + students.Count);
+        //Debug.Log("students size is... " + students.Count);
 
         currExp += buildings.Count * 5;
         currExp = currExp + (int)((students.Count * 10.0) * (overallHappiness / 100.0));
