@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System;
 /// <summary>
 /// The BuildingManager is responsible for the placement, removal, and operation of Buildings.
 /// </summary>
@@ -28,37 +29,46 @@ public class BuildingManager
         //Load in building templates from file
         Debug.Log("Loading templates");
         string filePath = Path.Combine(Application.streamingAssetsPath, "buildings.csv");
-        if(File.Exists(filePath))
+        try
         {
-            using (StreamReader file = new StreamReader(filePath))
+            if (File.Exists(filePath))
             {
-                string line;
-                while((line = file.ReadLine()) != null)
+                using (StreamReader file = new StreamReader(filePath))
                 {
-                    //Read header
-                    string[] header = line.Split(',');
-                    int id = int.Parse(header[0]);
-                    int width = int.Parse(header[1]);
-                    int height = int.Parse(header[2]);
-                    string prefab = header[3];
-                    //Initialize template
-                    BuildingTemplate b = new BuildingTemplate(id,width,height,prefab);
-                    for(int y = 0; y < height; y++)
+                    string line;
+                    while ((line = file.ReadLine()) != null)
                     {
-                        string[] row = file.ReadLine().Split(',');
-                        for(int x = 0; x < width; x++)
+                        //Read header
+                        string[] header = line.Split(',');
+                        int id = int.Parse(header[0]);
+                        int width = int.Parse(header[1]);
+                        int height = int.Parse(header[2]);
+                        string prefab = header[3];
+                        int type = int.Parse(header[4]);
+                        int capacity = int.Parse(header[5]);
+                        //Initialize template
+                        BuildingTemplate b = new BuildingTemplate(id, width, height, prefab, type, capacity);
+                        for (int y = 0; y < height; y++)
                         {
-                            b.SetCell(x, y, int.Parse(row[x]));
+                            string[] row = file.ReadLine().Split(',');
+                            for (int x = 0; x < width; x++)
+                            {
+                                b.SetCell(x, y, int.Parse(row[x]));
+                            }
                         }
+                        b.SetName(prefab);
+                        templates.Add(b);
                     }
-                    b.SetName(prefab);
-                    templates.Add(b);
                 }
             }
-        }
-        else
+            else
+            {
+                Debug.LogError("Could not find building template file.");
+            }
+        } catch(Exception e)
         {
-            Debug.LogError("Could not find building template file.");
+            Debug.LogError("Failed to initialize BuildingManager!");
+            Debug.LogError(e);
         }
         currentTemplate = 0;
     }
@@ -98,8 +108,10 @@ public class BuildingManager
                 }
             }
         }
-        buildings.Add(building);
+        building.SetCapacity(template.GetCapacity());
+        building.SetBuildingType(template.GetBuildingType());
         building.AddGameObject(gameManager.AddNewGameObject(template.GetPrefab(), position));
+        buildings.Add(building);
         Debug.Log("Created new building: " + building);
     }
 
@@ -113,7 +125,7 @@ public class BuildingManager
         building.SetVisits(buildSave.visits);
         building.SetBoardPos(buildSave.boardPos);
         building.SetTemplate(buildSave.template);
-        building.SetType(buildSave.type);
+        building.SetBuildingType(buildSave.type);
         for (int x = 0; x < template.GetWidth(); x++)
         {
             for (int y = 0; y < template.GetHeight(); y++)
@@ -154,7 +166,7 @@ public class BuildingManager
     {
         if(buildings.Count > 0)
         {
-            return buildings[Random.Range(0, buildings.Count)];
+            return buildings[UnityEngine.Random.Range(0, buildings.Count)];
         }
         return null;
     }
@@ -176,4 +188,68 @@ public class BuildingManager
     }
 
     public List<Building> GetBuildings() { return buildings; }
+    public List<Building> GetBuildingsOfType(int type)
+    {
+        List<Building> selected = new List<Building>();
+        foreach(Building building in buildings)
+        {
+            if(building.GetBuildingType() == type)
+            {
+                selected.Add(building);
+            }
+        }
+        if(selected.Count > 0)
+        {
+            return selected;
+        }
+        return null;
+    }
+    public int GetBuildingCountOfType(int type)
+    {
+        int count = 0;
+        foreach(Building building in buildings)
+        {
+            if(building.GetBuildingType() == type)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+    /// <summary>
+    /// Returns a random Building which matches the given type and which isn't full. Returns null if no such building can be found
+    /// </summary>
+    public Building GetRandomAvailableOfType(int type)
+    {
+        List<Building> acceptable = GetBuildingsOfType(type);
+        if(acceptable == null)
+        {
+            throw new Exception("Could not find any buildings of type " + type);
+        }
+        // Iterate through the list, starting at a random point. If it loops around, then no valid building was found
+        int index = UnityEngine.Random.Range(0, acceptable.Count);
+        for(int i = 0; i < acceptable.Count; i++)
+        {
+            if (!acceptable[(index + i) % acceptable.Count].IsFull())
+            {
+                return acceptable[(index + i) % acceptable.Count];
+            }
+        }
+        throw new Exception("Could not find any non-full buildings of type " + type);
+    }
+    /// <summary>
+    /// Returns the number of available (non-full) Buildings which match the given type
+    /// </summary>
+    public int GetAvailableBuildingCountOfType(int type)
+    {
+        int count = 0;
+        foreach(Building building in buildings)
+        {
+            if(building.GetBuildingType() == type && !building.IsFull())
+            {
+                count++;
+            }
+        }
+        return count;
+    }
 }
