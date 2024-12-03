@@ -32,9 +32,7 @@ public class GameEvent
     }
     public void AddOption(string optionText, string optionNext)
     {
-        Debug.Log("adding new option: " + optionText + ", " + optionNext);
         options.Add(new Option(optionText, optionNext));
-        Debug.Log("done");
     }
     /// <summary>
     /// Gets the number of options this GameEvent has.
