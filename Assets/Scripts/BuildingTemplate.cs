@@ -35,4 +35,5 @@ public class BuildingTemplate
     public GameObject GetPrefab() { return prefab; }
     public int GetBuildingType() { return type; }
     public int GetCapacity() { return capacity; }
+    // TODO: function to return building type
 }

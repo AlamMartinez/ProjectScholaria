@@ -27,10 +27,14 @@ public class GameEvent
         this.name = name;
         this.description = description;
         available = false;
+
+        options = new List<Option>();
     }
     public void AddOption(string optionText, string optionNext)
     {
+        Debug.Log("adding new option: " + optionText + ", " + optionNext);
         options.Add(new Option(optionText, optionNext));
+        Debug.Log("done");
     }
     /// <summary>
     /// Gets the number of options this GameEvent has.
@@ -61,5 +65,14 @@ public class GameEvent
     public void SetAvailable(bool b)
     {
         available = b;
+    }
+    public override string ToString()
+    {
+        string output = name + "(" + id + ") \n" + description + "\n";
+        for(int i = 0; i < options.Count; i++)
+        {
+            output += "1: " + options[i].optionText + " --> " + options[i].optionNext + "\n";
+        }
+        return output;
     }
 }

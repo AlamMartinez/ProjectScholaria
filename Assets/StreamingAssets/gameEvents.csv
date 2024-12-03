@@ -1,0 +1,3 @@
+example_event;Example Event;An example description.;TRUE;Yes;other_event;No;another_event
+other_event;Other Event;"Hello, world!";FALSE;Ok;none
+another_event;Another Event;How's it going?;FALSE;Good;none;Bad;none

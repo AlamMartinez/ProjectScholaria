@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public class GameEventManager
@@ -14,6 +15,7 @@ public class GameEventManager
     {
         this.gameManager = gameManager;
         gameEvents = new Dictionary<string, GameEvent>();
+        starterEvents = new List<GameEvent>();
         // Load GameEvents from file
         string filePath = Path.Combine(Application.streamingAssetsPath, "gameEvents.csv");
         if(File.Exists(filePath))
@@ -25,6 +27,7 @@ public class GameEventManager
                 {
                     string[] split = line.Split(';');
                     // First three items are id, name, and description
+                    Debug.Log(split.Length);
                     GameEvent gameEvent = new GameEvent(
                         split[0],
                         split[1],
@@ -43,6 +46,7 @@ public class GameEventManager
                     {
                         starterEvents.Add(gameEvent);
                     }
+                    Debug.Log("Loaded event: " + gameEvent);
                 }
             }
         }
