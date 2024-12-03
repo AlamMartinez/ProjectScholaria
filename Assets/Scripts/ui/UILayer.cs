@@ -18,8 +18,10 @@ public struct UI_State
 public class UILayer : MonoBehaviour
 {
     public GameManager gameManager;
+    public GameEventManager eventManager;
     public GameObject pauseUI;
     public GameObject confirmationUI;
+    public GameObject eventUI;
     public TextMeshProUGUI infoDisplay;
     private UI_State uiState;
 
@@ -65,9 +67,18 @@ public class UILayer : MonoBehaviour
         pauseUI.SetActive(false);
     }
 
+    public void OnEventShow(string event_title) {
+        eventUI.SetActive(true);
+    }
+
+    public void OnEventClose() {
+        eventUI.SetActive(false);
+    }
+
     void Start()
     {
-        //this.uiState.currentMode = gameManager.GetMode();
+        this.eventManager = gameManager.GetEventManager();
+        this.eventManager.SetUILayer(this);
     }
 
     void Update()

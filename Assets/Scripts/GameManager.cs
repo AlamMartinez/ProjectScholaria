@@ -69,7 +69,6 @@ public class GameManager : MonoBehaviour
         scoreSystem = new ScoreSystem(this, placementManager);
         vehicleManager = new VehicleManager(this, grid);
         timeManager = new TimeManager(this, gameEventManager);
-        gameEventManager = new GameEventManager(this);
         mode = NONE;
         gameObjects = new List<GameObject>();
         gameState = new GameState(0);
@@ -290,6 +289,7 @@ public class GameManager : MonoBehaviour
     /// Determined by the GameManager's current mode
     /// </summary>
     /// <param name="amount">Amount to cycle by</param>
+    public GameEventManager GetEventManager() { return gameEventManager; }
     public void Cycle(int amount)
     {
         switch(mode)

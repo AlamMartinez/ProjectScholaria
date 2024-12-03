@@ -11,6 +11,7 @@ public class GameEventManager
     private List<GameEvent> starterEvents;
 
     private GameEvent currentEvent;
+    private UILayer uiLayer;
     public GameEventManager(GameManager gameManager)
     {
         this.gameManager = gameManager;
@@ -56,6 +57,8 @@ public class GameEventManager
         }
     }
 
+    public void SetUILayer(UILayer ui) { this.uiLayer = ui; }
+
     public void ProgressEvent()
     {
         // If there is no current event, select a new starter event
@@ -73,7 +76,7 @@ public class GameEventManager
             }
         }
         // Tell UI manager to show the event window and update text
-
+        uiLayer.OnEventShow("test");
     }
 
     public void ChooseOption(int o)
