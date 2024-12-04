@@ -6,8 +6,10 @@ TagManager:
   tags:
   - manager
   - Path
-  - eventopt
   - eventname
+  - eventdesc
+  - event
+  - Eventopt
   layers:
   - Default
   - TransparentFX

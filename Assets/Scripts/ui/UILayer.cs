@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
+//using UnityEngine.UIElements;
 using TMPro;
 
 public struct UI_State
@@ -22,9 +22,16 @@ public class UILayer : MonoBehaviour
     public GameObject pauseUI;
     public GameObject confirmationUI;
     public GameObject eventUI;
+    public GameObject buttonPrefab;
+    public Transform buttonsList;
     public TextMeshProUGUI infoDisplay;
+    public List<GameObject> eventButtons;
     private UI_State uiState;
 
+    void Start()
+    {
+
+    }
 
     public void OnSavePress()
     {
@@ -72,20 +79,58 @@ public class UILayer : MonoBehaviour
         eventUI.SetActive(false);
     }
 
+    public void ShowEvent(ref GameEvent env) {
+        eventUI.SetActive(false);
+        Debug.Log("Example event started: " + env.ToString());
+        var fields = eventUI.GetComponentsInChildren<TextMeshProUGUI>();
+        if(fields.Length > 1) {
+            Debug.Log("description");
+            fields[0].text = env.GetName();
+            fields[1].text = env.GetDesc();
+        }
+
+        for (int i = 0;  i < env.GetOptionCount();  i++)
+        {
+            var button = Instantiate(buttonPrefab);
+            button.transform.SetParent(buttonsList);
+            button.GetComponentInChildren<TextMeshProUGUI>().text = env.GetOptionText(i);
+            var value = i;
+            button.GetComponent<Button>().onClick.AddListener(() => OnOptionPress(value));
+            eventButtons.Add(button);
+        }
+        eventUI.SetActive(true);
+    }
+
+    public void OnOptionPress(int val) {
+        var eventMan = gameManager.GetEventManager();
+        eventUI.SetActive(false);
+        eventMan.ChooseOption(val);
+        ClearOptions();
+    }
+
+
+    public void ClearOptions() {
+        //var buttons = gameManager.GetGameObjects().FindAll(gm => gm.tag == "eventname");
+        //var buttons = GameObject.FindGameObjectsWithTag("eventname");
+        if(eventButtons.Count == 0) {
+            Debug.Log("Problem");
+        }
+        foreach (var button in eventButtons)
+        {
+            Destroy(button);
+        }
+        eventButtons.Clear();
+    }
+
+
     public void OnEventTest() {
         var eventMan = gameManager.GetEventManager();
         eventMan.ProgressEvent();
         GameEvent env = eventMan.GetCurrentEvent();
-        Debug.Log("Example event started: " + env.ToString());
-        eventUI.GetComponentInChildren<TextMeshProUGUI>().text = env.GetName();
-        eventUI.SetActive(true);
+        ShowEvent(ref env);
     }
 
 
-    void Start()
-    {
-
-    }
 
     void Update()
     {
