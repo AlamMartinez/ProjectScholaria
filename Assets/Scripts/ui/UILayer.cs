@@ -67,18 +67,24 @@ public class UILayer : MonoBehaviour
         pauseUI.SetActive(false);
     }
 
-    public void OnEventShow(string event_title) {
-        eventUI.SetActive(true);
-    }
 
     public void OnEventClose() {
         eventUI.SetActive(false);
     }
 
+    public void OnEventTest() {
+        var eventMan = gameManager.GetEventManager();
+        eventMan.ProgressEvent();
+        GameEvent env = eventMan.GetCurrentEvent();
+        Debug.Log("Example event started: " + env.ToString());
+        eventUI.GetComponentInChildren<TextMeshProUGUI>().text = env.GetName();
+        eventUI.SetActive(true);
+    }
+
+
     void Start()
     {
-        this.eventManager = gameManager.GetEventManager();
-        this.eventManager.SetUILayer(this);
+
     }
 
     void Update()

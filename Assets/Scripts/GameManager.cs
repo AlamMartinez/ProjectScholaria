@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
         placementManager = new PlacementManager(this, buildingManager, grid);
         scoreSystem = new ScoreSystem(this, placementManager);
         vehicleManager = new VehicleManager(this, grid);
+        gameEventManager = new GameEventManager(this, uiLayer);
         timeManager = new TimeManager(this, gameEventManager);
         mode = NONE;
         gameObjects = new List<GameObject>();
@@ -105,6 +106,7 @@ public class GameManager : MonoBehaviour
     {
         studentManager.Update();
         vehicleManager.Update();
+        timeManager.Update();
 
         scoreSystem.SetStudentList(studentManager.GetListOfStudents());
         scoreSystem.SetBuildingList(buildingManager.GetBuildings());

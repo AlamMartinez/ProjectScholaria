@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TimeManager
 {
-    /* 
+    /*
      * The year is split into 52 weeks;
      * There are two semesters: fall semester, and spring semester
      * There are two breaks consisting of two weeks each in between the semesters, for a total of 4 weeks off
@@ -44,6 +44,7 @@ public class TimeManager
         // If cooldown has elapsed, roll the dice and fire an event if it succeeds
         if(eventCooldown == 0 && eventChance > Random.Range(0f,1f))
         {
+            Debug.Log("Event Progress");
             gameEventManager.ProgressEvent();
         }
     }

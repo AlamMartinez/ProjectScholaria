@@ -73,4 +73,5 @@ public class GameEvent
         }
         return output;
     }
+    public string GetName() { return this.name; }
 }

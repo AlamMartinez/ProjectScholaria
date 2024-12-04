@@ -12,9 +12,10 @@ public class GameEventManager
 
     private GameEvent currentEvent;
     private UILayer uiLayer;
-    public GameEventManager(GameManager gameManager)
+    public GameEventManager(GameManager gameManager, UILayer ui)
     {
         this.gameManager = gameManager;
+        this.uiLayer = ui;
         gameEvents = new Dictionary<string, GameEvent>();
         starterEvents = new List<GameEvent>();
         // Load GameEvents from file
@@ -57,8 +58,6 @@ public class GameEventManager
         }
     }
 
-    public void SetUILayer(UILayer ui) { this.uiLayer = ui; }
-
     public void ProgressEvent()
     {
         // If there is no current event, select a new starter event
@@ -76,7 +75,8 @@ public class GameEventManager
             }
         }
         // Tell UI manager to show the event window and update text
-        uiLayer.OnEventShow("test");
+
+        Debug.Log("Current Event: " + currentEvent.ToString());
     }
 
     public void ChooseOption(int o)
@@ -112,4 +112,6 @@ public class GameEventManager
         }
         return null;
     }
+
+    public GameEvent GetCurrentEvent() { return this.currentEvent; }
 }
