@@ -126,8 +126,6 @@ public class UILayer : MonoBehaviour
     public void OnEventTest() {
         var eventMan = gameManager.GetEventManager();
         eventMan.ProgressEvent();
-        GameEvent env = eventMan.GetCurrentEvent();
-        ShowEvent(ref env);
     }
 
 
@@ -165,6 +163,7 @@ public class UILayer : MonoBehaviour
         //update ui info
         infoDisplay.text = "Students: " + gameManager.GetGameState().numStudents +
             "\nCurrent Mode: " + modeText +
+            "\nCurrent Time: " + gameManager.GetTimeManager().GetTimeString() +
             "\n" + gameManager.GetGameState().selectionContext;
     }
 }

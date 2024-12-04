@@ -56,7 +56,6 @@ public class GameManager : MonoBehaviour
 
     public Building selectedBuilding;
     public TextMeshProUGUI buildingDisplay;
-    public TextMeshProUGUI modeDisplay;
 
     void Start()
     {
@@ -134,36 +133,7 @@ public class GameManager : MonoBehaviour
         {
             gameState.selectionContext = "";
         }
-        //Update mode UI
-        switch(mode)
-        {
-            case NONE:
-                modeDisplay.text = "Mode: Overview";
-                break;
-            case PLACEMENT:
-                switch(placementManager.GetPlacementMode())
-                {
-                    case PlacementManager.BUILDING:
-                        modeDisplay.text = "Mode: Placing Buildings";
-                        break;
-                    case PlacementManager.PATHING:
-                        modeDisplay.text = "Mode: Placing Pathways";
-                        break;
-                    case PlacementManager.ROAD:
-                        modeDisplay.text = "Mode: Placing Roads";
-                        break;
-                    case PlacementManager.BUS_STOP:
-                        modeDisplay.text = "Mode: Adding Bus Stops";
-                        break;
-                    case PlacementManager.CROSS_WALK:
-                        modeDisplay.text = "Mode: Adding Cross Walks";
-                        break;
-                }
-                break;
-            case DEMOLITION:
-                modeDisplay.text = "Mode: Demolition";
-                break;
-        }
+
     }
     /// <summary>
     /// Updates the position of both the world cursor GameObject, as well as the internal cursor position
@@ -292,6 +262,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="amount">Amount to cycle by</param>
     public GameEventManager GetEventManager() { return gameEventManager; }
+    public TimeManager GetTimeManager() { return timeManager; }
     public void Cycle(int amount)
     {
         switch(mode)

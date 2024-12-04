@@ -75,8 +75,7 @@ public class GameEventManager
             }
         }
         // Tell UI manager to show the event window and update text
-
-        Debug.Log("Current Event: " + currentEvent.ToString());
+        uiLayer.ShowEvent(ref currentEvent);
     }
 
     public void ChooseOption(int o)
