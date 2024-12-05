@@ -20,6 +20,7 @@ public class UILayer : MonoBehaviour
     public GameManager gameManager;
     public GameEventManager eventManager;
     public GameObject pauseUI;
+    public GameObject buildingUI;
     public GameObject confirmationUI;
     public GameObject eventUI;
     public GameObject buttonPrefab;
@@ -128,7 +129,14 @@ public class UILayer : MonoBehaviour
         eventMan.ProgressEvent();
     }
 
+    public void OnBuildingUIShow() {
+        buildingUI.SetActive(true);
 
+    }
+
+    public void OnBuildingUIClose() {
+        buildingUI.SetActive(false);
+    }
 
     void Update()
     {
