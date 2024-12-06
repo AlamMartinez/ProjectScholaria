@@ -25,6 +25,7 @@ public class TimeManager
     {
         this.gameManager = gameManager;
         this.gameEventManager = gameEventManager;
+        this.timeModifier = 1.0f;
     }
     /// <summary>
     /// Returns the time since the last frame multiplied by the current speed of the game. If the game is paused, this value will be zero.
@@ -60,4 +61,7 @@ public class TimeManager
     {
         return "Year " + (((int)time) / 52 + 1) + ", week " + (((int)time) % 52);
     }
+
+    public float GetTimeMod() { return this.timeModifier; }
+    public void SetTimeMod(float val) { this.timeModifier = val; }
 }

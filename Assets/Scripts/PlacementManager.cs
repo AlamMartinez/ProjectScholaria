@@ -29,62 +29,88 @@ public class PlacementManager
     /// <param name="position">Grid position to place the structure at</param>
     public void PlaceAt(Vector2Int position)
     {
+        //Check if selected thing can be placed at the given position
+        if(!CanPlaceAt(position))
+        {
+            return;
+        }
+        //If it can, place it
         switch(placementMode)
         {
             case BUILDING:
                 //Get current building template & check collisions
                 BuildingTemplate template = buildingManager.GetCurrentTemplate();
-                for(int x = 0; x < template.GetWidth(); x++)
+                buildingManager.ConstructBuilding(position, template);
+                return;
+            case PATHING:
+                gameManager.AddPath(position.x, position.y);
+                return;
+            case ROAD:
+                gameManager.AddRoad(position.x, position.y);
+                return;
+            case BUS_STOP:
+                gameManager.DemolishRoad(position);
+                gameManager.AddBusStop(position.x, position.y);
+                busStops.Add(grid.GetCell(position.x, position.y));
+                return;
+            case CROSS_WALK:
+                //gameManager.DemolishRoad(position);
+                gameManager.AddCrossWalk(position.x, position.y);
+                //busStops.Add(grid.GetCell(position.x, position.y));
+                return;
+        }
+        return;
+    }
+    public bool CanPlaceAt(Vector2Int position)
+    {
+        switch (placementMode)
+        {
+            case BUILDING:
+                //Get current building template & check collisions
+                BuildingTemplate template = buildingManager.GetCurrentTemplate();
+                for (int x = 0; x < template.GetWidth(); x++)
                 {
-                    for(int y = 0; y < template.GetHeight(); y++)
+                    for (int y = 0; y < template.GetHeight(); y++)
                     {
-                        if (template.GetCell (x,y) > 0 && grid.GetCell(position.x + x, position.y + y).GetType() != Cell.EMPTY)
+                        if (template.GetCell(x, y) > 0 && grid.GetCell(position.x + x, position.y + y).GetType() != Cell.EMPTY)
                         {
                             Debug.Log("Cannot place building at (" + position.x + ", " + position.y + ")");
-                            return;
+                            return false;
                         }
                     }
                 }
-                //If building footprint is clear, create new building
-                buildingManager.ConstructBuilding(position, template);
-                break;
+                //If building footprint is clear, return true
+                return true;
             case PATHING:
-                if(grid.GetCell(position.x,position.y).GetType() != Cell.EMPTY)
+                if (grid.GetCell(position.x, position.y).GetType() != Cell.EMPTY)
                 {
                     Debug.Log("Cannot place path at (" + position.x + ", " + position.y + ")");
-                    return;
+                    return false;
                 }
-                gameManager.AddPath(position.x, position.y);
-                break;
+                return true;
             case ROAD:
                 if (grid.GetCell(position.x, position.y).GetType() != Cell.EMPTY)
                 {
                     Debug.Log("Cannot place road at (" + position.x + ", " + position.y + ")");
-                    return;
+                    return false;
                 }
-                gameManager.AddRoad(position.x, position.y);
-                break;
+                return true;
             case BUS_STOP:
                 if (grid.GetCell(position.x, position.y).GetType() == Cell.ROAD)
                 {
-                    gameManager.DemolishRoad(position);
-                    gameManager.AddBusStop(position.x, position.y);
-                    busStops.Add(grid.GetCell(position.x, position.y));
-                    return;
+                    return false;
                 }
                 Debug.Log("Missing road for bus stop at (" + position.x + ", " + position.y + ")");
-                break;
+                return true;
             case CROSS_WALK:
                 if (grid.GetCell(position.x, position.y).GetType() == Cell.EMPTY)
                 {
-                    //gameManager.DemolishRoad(position);
-                    gameManager.AddCrossWalk(position.x, position.y);
-                    //busStops.Add(grid.GetCell(position.x, position.y));
-                    return;
+                    return false;
                 }
                 Debug.Log("Missing road for bus stop at (" + position.x + ", " + position.y + ")");
-                break;
+                return true;
         }
+        return false;
     }
     /// <summary>
     /// Will demolish the structure that occupies the given Cell.
@@ -92,6 +118,11 @@ public class PlacementManager
     /// <param name="position"></param>
     public void DemolishAt(Vector2Int position)
     {
+        if(grid.GetCell(position.x, position.y).GetType() == Cell.EMPTY)
+        {
+            return;
+        }
+        Debug.Log("Demolishing " + position.x + ", " + position.y + ": " + grid.GetCell(position.x, position.y).GetType());
         switch (grid.GetCell(position.x, position.y).GetType())
         {
             case Cell.BUILDING:

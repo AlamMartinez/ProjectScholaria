@@ -61,7 +61,10 @@ public class Cell
     {
         return building != null && building.IsEntrance(this);
     }
-
+    public bool IsPath()
+    {
+        return type == PATH;
+    }
     public bool IsRoad()
     {
         return type == ROAD;

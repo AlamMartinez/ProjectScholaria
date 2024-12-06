@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Grid
 {
@@ -73,6 +74,35 @@ public class Grid
         {
             grid[x, y].SetBuilding(b);
         }
+    }
+    /// <summary>
+    /// Returns the value representing the arrangements of the paths at the given cell
+    /// North : +1
+    /// East  : +2
+    /// South : +4
+    /// West  : +8
+    /// </summary>
+    public int GetCellPathValue(int x, int y)
+    {
+        Debug.Log("Checking for " + x + ", " + y);
+        int val = 0;
+        int[,] directions = new int[,] { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
+        for (int i = 0; i < 4; i++)
+        {
+            int x1 = x + directions[i, 0];
+            int y1 = y + directions[i, 1];
+            Debug.Log(x1 + ", " + y1 + " is ");
+            if (x1 >= 0 && x1 < grid.GetLength(0) && y1 >= 0 && y1 < grid.GetLength(1) && (grid[x1,y1].IsPath() || grid[x1,y1].IsEntrance()))
+            {
+                val += (int)(Mathf.Pow(2, i));
+                Debug.Log("valid");
+            }
+            else
+            {
+                Debug.Log("invalid");
+            }
+        }
+        return val;
     }
 
 }
