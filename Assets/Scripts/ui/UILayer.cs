@@ -23,6 +23,7 @@ public class UILayer : MonoBehaviour
     public GameObject buildingUI;
     public GameObject confirmationUI;
     public GameObject eventUI;
+    public GameObject helpUI;
     public GameObject buttonPrefab;
     public Transform buttonsList;
     public TextMeshProUGUI infoDisplay;
@@ -132,9 +133,12 @@ public class UILayer : MonoBehaviour
         eventMan.ProgressEvent();
     }
 
-    public void OnBuildingUIShow() {
+    public void OnBuildingUIShow(ref Building building) {
+        var fields = eventUI.GetComponentsInChildren<TextMeshProUGUI>();
+        if(fields.Length > 1) {
+            fields[0].text = building.GetName();
+        }
         buildingUI.SetActive(true);
-
     }
 
     public void OnBuildingUIClose() {
@@ -151,6 +155,16 @@ public class UILayer : MonoBehaviour
         multi *= 2.0f;
         tm.SetTimeMod(multi);
     }
+
+    public void OnHelpPress() {
+        pauseUI.SetActive(false);
+        helpUI.SetActive(true);
+    }
+
+    public void OnHelpClose() {
+        helpUI.SetActive(false);
+    }
+
 
     void Update()
     {

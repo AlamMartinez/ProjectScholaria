@@ -246,7 +246,7 @@ public class GameManager : MonoBehaviour
         }
 
         if(selectedBuilding != null) {
-            uiLayer.OnBuildingUIShow();
+            uiLayer.OnBuildingUIShow(ref selectedBuilding);
         }
     }
     /// <summary>
