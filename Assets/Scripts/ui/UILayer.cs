@@ -49,9 +49,12 @@ public class UILayer : MonoBehaviour
         gameManager.ResetGame();
     }
 
+    public void ShowPauseMenu() {
+        pauseUI.SetActive(true);
+    }
+
     public void OnUnpausePress() {
         pauseUI.SetActive(false);
-        Debug.Log("Pause menu close");
     }
 
     public void OnExitPress() {
@@ -138,12 +141,24 @@ public class UILayer : MonoBehaviour
         buildingUI.SetActive(false);
     }
 
+    public void OnNormalSpeedPress() {
+        gameManager.GetTimeManager().SetTimeMod(1.0f);
+    }
+
+    public void OnFastForwardPress() {
+        var tm = gameManager.GetTimeManager();
+        var multi = tm.GetTimeMod();
+        multi *= 2.0f;
+        tm.SetTimeMod(multi);
+    }
+
     void Update()
     {
+        var gameState = gameManager.GetGameState();
+
         // handle input
         if(Input.GetKeyDown("h")) {
-            pauseUI.SetActive(true);
-            Debug.Log("Pause menu open");
+            ShowPauseMenu();
         }
 
         var modeText = "";
@@ -168,10 +183,14 @@ public class UILayer : MonoBehaviour
                 break;
         }
 
+        if(gameState.selectionContext == "") {
+            buildingUI.SetActive(false);
+        }
+
         //update ui info
-        infoDisplay.text = "Students: " + gameManager.GetGameState().numStudents +
+        infoDisplay.text = "Students: " + gameState.numStudents +
             "\nCurrent Mode: " + modeText +
             "\nCurrent Time: " + gameManager.GetTimeManager().GetTimeString() +
-            "\n" + gameManager.GetGameState().selectionContext;
+            "\n" + gameState.selectionContext;
     }
 }

@@ -244,6 +244,10 @@ public class GameManager : MonoBehaviour
                 placementManager.DemolishAt(cursorPosition);
                 break;
         }
+
+        if(selectedBuilding != null) {
+            uiLayer.OnBuildingUIShow();
+        }
     }
     /// <summary>
     /// Adds given GameObject to GameManager's list
