@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
         placementManager = new PlacementManager(this, buildingManager, grid);
         scoreSystem = new ScoreSystem(this, placementManager);
         vehicleManager = new VehicleManager(this, grid);
-        gameEventManager = new GameEventManager(this, uiLayer);
+        gameEventManager = new GameEventManager(this, uiLayer, scoreSystem,studentManager);
         timeManager = new TimeManager(this, gameEventManager);
         mode = NONE;
         gameObjects = new List<GameObject>();

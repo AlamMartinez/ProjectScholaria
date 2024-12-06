@@ -137,9 +137,9 @@ public class UILayer : MonoBehaviour
 
     public void OnBuildingUIShow(ref Building building) {
         buildingName.text = building.GetName();
-        buildingDisplay.text = "Type: " + building.GetType() +
-            "Vists: " + building.GetVisits() +
-            "Capacity: " + building.GetCapacity();
+        buildingDisplay.text = 
+            building.GetType() +
+            "\n" + building.GetUsageString();
         buildingUI.SetActive(true);
     }
 
@@ -211,8 +211,10 @@ public class UILayer : MonoBehaviour
 
         //update ui info
         infoDisplay.text = "Students: " + gameState.numStudents +
-            "\nCurrent Mode: " + modeText +
             "\nCurrent Time: " + gameManager.GetTimeManager().GetTimeString() +
-            "\n" + gameState.selectionContext;
+            "\n" + gameState.selectionContext +
+            "\nCurrent Mode: " + modeText;
+
+
     }
 }

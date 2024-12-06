@@ -1,33 +1,38 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System;
+using System.Text;
 using UnityEngine;
 
 public class GameEventManager
 {
     private GameManager gameManager;
-
-    private Dictionary<string,GameEvent> gameEvents;
+    private ScoreSystem scoreSystem;
+    private StudentManager studentManager;
+    private Dictionary<string, GameEvent> gameEvents;
     private List<GameEvent> starterEvents;
 
     private GameEvent currentEvent;
     private UILayer uiLayer;
-    public GameEventManager(GameManager gameManager, UILayer ui)
+    public GameEventManager(GameManager gameManager, UILayer ui, ScoreSystem scoreSystem, StudentManager studentManager)
     {
         this.gameManager = gameManager;
         this.uiLayer = ui;
+        this.scoreSystem = scoreSystem;
+        this.studentManager = studentManager;
         gameEvents = new Dictionary<string, GameEvent>();
         starterEvents = new List<GameEvent>();
         // Load GameEvents from file
-        string filePath = Path.Combine(Application.streamingAssetsPath, "gameEvents.tsv");
-        if(File.Exists(filePath))
+        string filePath = Path.Combine(Application.streamingAssetsPath, "gameEventSheet.txt");
+        if (File.Exists(filePath))
         {
             using (StreamReader file = new StreamReader(filePath))
             {
                 string line;
-                while((line = file.ReadLine()) != null)
+                while ((line = file.ReadLine()) != null)
                 {
-                    string[] split = line.Split(';');
+                    string[] split = line.Split('\t');
                     // First three items are id, name, and description
                     Debug.Log(split.Length);
                     GameEvent gameEvent = new GameEvent(
@@ -39,12 +44,18 @@ public class GameEventManager
                     // Remaining items are pairs of option texts and next events
                     for (int i = 4; i < split.Length; i += 2)
                     {
-                        gameEvent.AddOption(split[i], split[i + 1]);
+                        if (split[i].Length > 0)
+                        {
+                            string nextText = split[i];
+                            string nextOption = split[i + 1];
+                            nextOption.Replace(" ", "");
+                            gameEvent.AddOption(nextText, nextOption);
+                        }
                     }
                     // Map new event to its id
                     gameEvents.Add(gameEvent.GetID(), gameEvent);
                     // If event can be a starter, add it to a separate list
-                    if (bool.Parse(split[3]))
+                    if (string.Equals((split[3]), "TRUE"))
                     {
                         starterEvents.Add(gameEvent);
                     }
@@ -65,14 +76,17 @@ public class GameEventManager
         {
             currentEvent = GetRandomStarterEvent();
             // If all starter events have already been used, allow them to be reused.
-            if(currentEvent == null)
+            if (currentEvent == null)
             {
-                foreach(GameEvent e in starterEvents)
+                foreach (GameEvent e in starterEvents)
                 {
                     e.SetAvailable(true);
                 }
                 currentEvent = GetRandomStarterEvent();
+
             }
+
+            PlayEvent(currentEvent.GetID());
         }
         // Tell UI manager to show the event window and update text
         uiLayer.ShowEvent(ref currentEvent);
@@ -85,7 +99,8 @@ public class GameEventManager
         currentEvent.SetAvailable(false);
         // Get corresponding event
         string key = currentEvent.GetOptionNext(o);
-        if (key == "none")
+        key.Replace(" ", "");
+        if (string.Equals(key, "none"))
         {
             // If next event is "none", then the event chain has concluded
             currentEvent = null;
@@ -100,12 +115,13 @@ public class GameEventManager
 
     public GameEvent GetRandomStarterEvent()
     {
-        int index = Random.Range(0, starterEvents.Count);
+        int index = UnityEngine.Random.Range(0, starterEvents.Count);
         for (int i = 0; i < starterEvents.Count; i++)
         {
             int val = (index + i) % starterEvents.Count;
             if (starterEvents[val].IsAvailable())
             {
+                starterEvents[val].GetID();
                 return starterEvents[val];
             }
         }
@@ -113,4 +129,49 @@ public class GameEventManager
     }
 
     public GameEvent GetCurrentEvent() { return this.currentEvent; }
+
+    public void PlayEvent(string id)
+    {
+        switch (id)
+        {
+            case "weather_heavy_rain":
+
+                break;
+            case "storm_no_class":
+
+                break;
+            case "storm_online_class":
+
+                break;
+            case "storm_in_person_class":
+
+                break;
+            case "construction_small_road":
+
+                break;
+            case "construction_medium_road":
+
+                break;
+            case "repavement_hire_workers":
+
+                break;
+            case "repavement_wait":
+
+                break;
+            case "construction_small_paths":
+
+                break;
+            case "construction_medium_paths":
+
+                break;
+            case "sport_home_game":
+
+                break;
+            case "student_no":
+                //studentManager.DecreaseHappiness();
+                break;
+        }
+
+        return;
+    }
 }
