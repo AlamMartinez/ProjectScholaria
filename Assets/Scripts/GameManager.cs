@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //Set up grid and managers
-        grid = new Grid(20, 20);
+        grid = new Grid(40, 40);
         studentManager = new StudentManager(this,grid);
         buildingManager = new BuildingManager(this, grid);
         saveManager = new SaveManager(this);
