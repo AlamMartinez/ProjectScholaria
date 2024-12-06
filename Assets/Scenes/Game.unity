@@ -1776,7 +1776,7 @@ Light:
     m_Strength: 1
     m_Bias: 0
     m_NormalBias: 0
-    m_NearPlane: 0.2
+    m_NearPlane: 0.1
     m_CullingMatrixOverride:
       e00: 1
       e01: 0
@@ -6520,12 +6520,17 @@ MonoBehaviour:
   mode: 0
   cursor: {fileID: 819151423}
   cursorPrefab: {fileID: -2432090755550338912, guid: aa00dad73bf91bd488c41c8f1ca25e70, type: 3}
-  pathPrefab: {fileID: 7260322706096682168, guid: 60aa4c583b2bd6046a83364abf2ef1b9, type: 3}
   roadPefab: {fileID: 2795862450608983600, guid: d648fb691d0bfad4ea2b86ce6cc50e8c, type: 3}
   busStopPrefab: {fileID: 919132149155446097, guid: f613876e98ceef44bbb38eb7fc6c9e25, type: 3}
   busVehiclePrefab: {fileID: 744887826789525860, guid: 1721b076edd7ba34e89ca2ccdaccde23, type: 3}
   crossWalkPrefab: {fileID: 7712035524381147673, guid: b3e0c5ae932de9f408b0e75d76c32c30, type: 3}
   ground: {fileID: 0}
+  pathDot: {fileID: 919132149155446097, guid: a9568540b00653742931af26e5f85672, type: 3}
+  pathNub: {fileID: 919132149155446097, guid: ae3011a1f968ccf45a1d24163112e165, type: 3}
+  pathCorner: {fileID: 919132149155446097, guid: 9295fdac05526e84c8bbc666737c44d9, type: 3}
+  pathStraight: {fileID: 919132149155446097, guid: 177c6fd564c1622478f536471527ba4f, type: 3}
+  pathT: {fileID: 919132149155446097, guid: 45ee4a1e8a791024d982811502247b8f, type: 3}
+  pathPlus: {fileID: 919132149155446097, guid: 9cc3c9d730e28c547af7bba9cdc1d058, type: 3}
   buildingDisplay: {fileID: 1156347636}
 --- !u!4 &1996203894
 Transform:
