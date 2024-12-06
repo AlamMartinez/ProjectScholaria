@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 using UnityEngine.UI;
 using TMPro;
 using System.Security.Cryptography;
+using System.IO;
 
 public struct GameState {
     public int numStudents;
@@ -47,12 +48,19 @@ public class GameManager : MonoBehaviour
     private List<GameObject> gameObjects;
     public GameObject cursor;
     public Mesh cursorPrefab;
-    public GameObject pathPrefab;
+
     public GameObject roadPefab;
     public GameObject busStopPrefab;
     public GameObject busVehiclePrefab;
     public GameObject crossWalkPrefab;
     public GameObject ground;
+
+    public GameObject pathDot;
+    public GameObject pathNub;
+    public GameObject pathCorner;
+    public GameObject pathStraight;
+    public GameObject pathT;
+    public GameObject pathPlus;
 
     public Building selectedBuilding;
     public TextMeshProUGUI buildingDisplay;
@@ -299,10 +307,65 @@ public class GameManager : MonoBehaviour
     public void AddPath(int x, int y)
     {
         grid.GetCell(x, y).SetType(Cell.PATH);
-        GameObject path = Instantiate(pathPrefab);
+        //Check neighbors for path status
+        int arrangement = grid.GetCellPathValue(x, y);
+        //Choose path model and orientation based on path arrangement
+        GameObject path = GetPathModel(arrangement);        
         path.name = "path" + x + "," + y;
         path.transform.position = new Vector3(x, 0, y);
         gameObjects.Add(path);
+        //Update neighboring paths
+        UpdateNeighborPaths(x, y);
+    }
+    public GameObject GetPathModel(int arrangement)
+    {
+        GameObject path = null;
+        switch (arrangement)
+        {
+            //Dot
+            case 0b0000: path = Instantiate(pathDot); break;
+            //Nub
+            case 0b0001: path = Instantiate(pathNub); break;
+            case 0b0010: path = Instantiate(pathNub); path.transform.Rotate(Vector3.up, 90); break;
+            case 0b0100: path = Instantiate(pathNub); path.transform.Rotate(Vector3.up, 180); break;
+            case 0b1000: path = Instantiate(pathNub); path.transform.Rotate(Vector3.up, 270); break;
+            //Corner
+            case 0b0011: path = Instantiate(pathCorner); break;
+            case 0b0110: path = Instantiate(pathCorner); path.transform.Rotate(Vector3.up, 90); break;
+            case 0b1100: path = Instantiate(pathCorner); path.transform.Rotate(Vector3.up, 180); break;
+            case 0b1001: path = Instantiate(pathCorner); path.transform.Rotate(Vector3.up, 270); break;
+            //Straight
+            case 0b0101: path = Instantiate(pathStraight); break;
+            case 0b1010: path = Instantiate(pathStraight); path.transform.Rotate(Vector3.up, 90); break;
+            //T-junction
+            case 0b0111: path = Instantiate(pathT); break;
+            case 0b1110: path = Instantiate(pathT); path.transform.Rotate(Vector3.up, 90); break;
+            case 0b1101: path = Instantiate(pathT); path.transform.Rotate(Vector3.up, 180); break;
+            case 0b1011: path = Instantiate(pathT); path.transform.Rotate(Vector3.up, 270); break;
+            //4-way junction
+            case 0b1111: path = Instantiate(pathPlus); break;
+        }
+        return path;
+    }
+    public void UpdateNeighborPaths(int x, int y)
+    {
+        foreach (Cell neighbor in grid.GetCell(x, y).GetNeighbors())
+        {
+            if (neighbor.GetType() == Cell.PATH)
+            {
+                for (int i = 0; i < gameObjects.Count; i++)
+                {
+                    if (gameObjects[i].name == "path" + neighbor.GetX() + "," + neighbor.GetY())
+                    {
+                        //Destroy existing gameobject and replace with new one with correct model
+                        Destroy(gameObjects[i]);
+                        gameObjects[i] = GetPathModel(grid.GetCellPathValue(neighbor.GetX(), neighbor.GetY()));
+                        gameObjects[i].transform.position = new Vector3(neighbor.GetX(), 0, neighbor.GetY());
+                        gameObjects[i].name = "path" + neighbor.GetX() + "," + neighbor.GetY();
+                    }
+                }
+            }
+        }
     }
 
     public void AddRoad(int x, int y)
@@ -346,13 +409,18 @@ public class GameManager : MonoBehaviour
     public void DemolishPath(Vector2Int position)
     {
         //Reset cell type and delete gameObject
+        Debug.Log("demolishing " + position.x + ", " + position.y);
         grid.GetCell(position.x, position.y).SetType(Cell.EMPTY);
-        foreach(GameObject obj in gameObjects)
+        Debug.Log(gameObjects.Count + " objects");
+        for(int i = 0; i < gameObjects.Count; i++)
         {
-            if(obj.name == ("path" + position.x + "," + position.y))
+                Debug.Log(gameObjects[i].name);
+            if(gameObjects[i].name == ("path" + position.x + "," + position.y))
             {
+                UpdateNeighborPaths(position.x, position.y);
                 Debug.Log("demolishing");
-                Destroy(obj);
+                Destroy(gameObjects[i]);
+                break;
             }
         }
         gameObjects.RemoveAll(obj => obj.name == ("path" + position.x + "," + position.y));

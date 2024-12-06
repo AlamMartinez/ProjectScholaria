@@ -51,7 +51,7 @@ public class PlacementManager
             case PATHING:
                 if(grid.GetCell(position.x,position.y).GetType() != Cell.EMPTY)
                 {
-                    Debug.Log("Cannot place path at (" + position.x + ", " + position.y + ")");
+                    //Debug.Log("Cannot place path at (" + position.x + ", " + position.y + ")");
                     return;
                 }
                 gameManager.AddPath(position.x, position.y);
@@ -92,6 +92,11 @@ public class PlacementManager
     /// <param name="position"></param>
     public void DemolishAt(Vector2Int position)
     {
+        if(grid.GetCell(position.x, position.y).GetType() == Cell.EMPTY)
+        {
+            return;
+        }
+        Debug.Log("Demolishing " + position.x + ", " + position.y + ": " + grid.GetCell(position.x, position.y).GetType());
         switch (grid.GetCell(position.x, position.y).GetType())
         {
             case Cell.BUILDING:
