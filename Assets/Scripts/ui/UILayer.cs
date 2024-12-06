@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-//using UnityEngine.UIElements;
 using TMPro;
 
 public struct UI_State
@@ -26,6 +25,9 @@ public class UILayer : MonoBehaviour
     public GameObject helpUI;
     public GameObject buttonPrefab;
     public Transform buttonsList;
+    public TextMeshProUGUI buildingName;
+    public TextMeshProUGUI buildingDisplay;
+    public TextMeshProUGUI statsDisplay;
     public TextMeshProUGUI infoDisplay;
     public List<GameObject> eventButtons;
     private UI_State uiState;
@@ -134,10 +136,10 @@ public class UILayer : MonoBehaviour
     }
 
     public void OnBuildingUIShow(ref Building building) {
-        var fields = eventUI.GetComponentsInChildren<TextMeshProUGUI>();
-        if(fields.Length > 1) {
-            fields[0].text = building.GetName();
-        }
+        buildingName.text = building.GetName();
+        buildingDisplay.text = "Type: " + building.GetType() +
+            "Vists: " + building.GetVisits() +
+            "Capacity: " + building.GetCapacity();
         buildingUI.SetActive(true);
     }
 
@@ -200,6 +202,12 @@ public class UILayer : MonoBehaviour
         if(gameState.selectionContext == "") {
             buildingUI.SetActive(false);
         }
+
+        //update ui stats
+        statsDisplay.text = "Score: " + gameState.Score +
+            "\nExperience: " + gameState.Exp +
+            "\nLevel: " + gameState.Level +
+            "\nHappiness: " + gameState.Happiness;
 
         //update ui info
         infoDisplay.text = "Students: " + gameState.numStudents +

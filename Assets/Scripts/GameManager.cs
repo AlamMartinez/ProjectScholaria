@@ -12,9 +12,17 @@ public struct GameState {
     public int numStudents;
     public string selectionContext;
 
+    public int Exp;
+    public double Happiness;
+    public int Level;
+    public int Score;
     public GameState(int value) {
         this.numStudents = value;
         this.selectionContext = "";
+        this.Exp = 0;
+        this.Happiness = 0.0;
+        this.Score = 0;
+        this.Level = 0;
     }
 }
 /// <summary>
@@ -135,6 +143,10 @@ public class GameManager : MonoBehaviour
         currExp = scoreSystem.GetExp();
         currScore = scoreSystem.CalcScore();
 
+        gameState.Level = currLevel;
+        gameState.Exp = currExp;
+        gameState.Score = currScore;
+        gameState.Happiness = currHappiness;
         //Debug.Log("currHappiness: " + currHappiness + "\ncurrLevel: " + currLevel + "\ncurrExp: " + currExp + "\ncurrScore: " + currScore);
         //Update selected building UI
         if (selectedBuilding != null)
@@ -314,7 +326,7 @@ public class GameManager : MonoBehaviour
         //Check neighbors for path status
         int arrangement = grid.GetCellPathValue(x, y);
         //Choose path model and orientation based on path arrangement
-        GameObject path = GetPathModel(arrangement);        
+        GameObject path = GetPathModel(arrangement);
         path.name = "path" + x + "," + y;
         path.transform.position = new Vector3(x, 0, y);
         gameObjects.Add(path);

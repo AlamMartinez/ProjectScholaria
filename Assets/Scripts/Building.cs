@@ -179,6 +179,19 @@ public class Building
     {
         return id + ", " + name + ", " + GetBuildingTypeString() + ", " + GetUsageString();
     }
+    public string GetType() {
+        switch(type)
+        {
+            case TYPE_NONE: return "none";
+            case TYPE_DORMITORY: return "Dormitory";
+            case TYPE_LECTURE: return "Lecture";
+            case TYPE_DINING: return "Dining";
+            case TYPE_LIBRARY: return "Library";
+            case TYPE_PARKING: return "Parking";
+            case TYPE_COMMONS: return "Commons";
+            default: return "Unknown";
+        };
+    }
     public const int TYPE_NONE = 0;
     public const int TYPE_DORMITORY = 1;
     public const int TYPE_LECTURE = 2;
