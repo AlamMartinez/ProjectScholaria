@@ -19,7 +19,7 @@ public class GameEventManager
         gameEvents = new Dictionary<string, GameEvent>();
         starterEvents = new List<GameEvent>();
         // Load GameEvents from file
-        string filePath = Path.Combine(Application.streamingAssetsPath, "gameEvents.csv");
+        string filePath = Path.Combine(Application.streamingAssetsPath, "gameEvents.tsv");
         if(File.Exists(filePath))
         {
             using (StreamReader file = new StreamReader(filePath))

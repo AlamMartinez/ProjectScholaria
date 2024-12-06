@@ -168,10 +168,12 @@ public class Student
         if(gameObject != null && path.Count > 0)
         {
             gameObject.transform.position = new Vector3(
-                Mathf.Lerp(position.GetX(), path[0].GetX(),travel), 
-                0,
+                Mathf.Lerp(position.GetX(), path[0].GetX(),travel),
+                0.09375f,
                 Mathf.Lerp(position.GetY(), path[0].GetY(), travel)
             );
+            float angle = Mathf.Atan2(path[0].GetY() - position.GetY(), path[0].GetX() - position.GetX());
+            gameObject.transform.eulerAngles = new Vector3(0, 90 - Mathf.Rad2Deg * angle, 0);
             
         }
         if(path.Count > 0)
@@ -200,6 +202,7 @@ public class Student
             else
             {
                 Debug.Log("Student " + id + " has reached the end of their schedule.");
+                scheduleIndex = 0;
             }
         }
     }

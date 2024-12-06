@@ -50,7 +50,7 @@ public class StudentManager
         meshFilter.mesh = template.GetComponent<MeshFilter>().sharedMesh;
         meshRenderer.material = Resources.Load<Material>("Misc/student");
         gameObject.transform.position = new Vector3(student.GetPositionCell().GetX(), 0.5f, student.GetPositionCell().GetY());
-        gameObject.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+        gameObject.transform.localScale = new Vector3(0.125f, 0.125f, 0.125f);
         student.SetGameObject(gameObject);
         Debug.Log("Created new student: ");
         return gameObject;
