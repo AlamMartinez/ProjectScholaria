@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,24 +17,25 @@ public class BuildingTemplate
     private int[,] cells;
     private GameObject prefab;
 
-    public BuildingTemplate(int id, int width, int height, string name, int type, int capacity) 
+    public BuildingTemplate(int id, string name, int width, int height, string prefabName, int type, int capacity) 
     {
         this.id = id;
         cells = new int[width, height];
         this.name = name;
         this.type = type;
         this.capacity = capacity;
-        prefab = Resources.Load<GameObject>(name);
+        prefab = Resources.Load<GameObject>("Buildings/"+ prefabName);
         Debug.Log("Created new building template: " + name + ", " + width + " x " + height + ", ID: " + id);
     }
     public void SetCell(int x, int y, int val) { cells[x, y] = val; }
     public int GetCell(int x, int y) { return cells[x, y]; }
     public int GetWidth() { return cells.GetLength(0); }
     public int GetHeight() { return cells.GetLength(1); }
-    public void SetName(string name) { this.name = name; }
+    //public void SetName(string name) { this.name = name; }
     public string GetName() { return this.name; }
     public GameObject GetPrefab() { return prefab; }
     public int GetBuildingType() { return type; }
+    public string GetBuildingTypeString() { return Building.GetBuildingTypeString(type); }
     public int GetCapacity() { return capacity; }
     // TODO: function to return building type
 }

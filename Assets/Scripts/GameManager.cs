@@ -78,8 +78,10 @@ public class GameManager : MonoBehaviour
         ground.AddComponent<MeshFilter>();
         MeshRenderer renderer = ground.AddComponent<MeshRenderer>();
         renderer.material = new Material(Shader.Find("Standard"));
-        Mesh mesh = new Mesh();
+        renderer.material.mainTexture = Resources.Load<Texture2D>("grass");
+        renderer.material.mainTexture.filterMode = FilterMode.Point;
         //Define vertices
+        Mesh mesh = new Mesh();
         Vector3[] vertices = new Vector3[]
         {
             new Vector3(-0.5f, 0, -0.5f), //Bottom left
@@ -93,10 +95,19 @@ public class GameManager : MonoBehaviour
             0, 2, 1, //First triangle
             0, 3, 2  //Second triangle
         };
+        //Define UV
+        Vector2[] uvs = {
+            new Vector2(0,0), //Bottom left
+            new Vector2(grid.GetWidth()/4,0), //Bottom right
+            new Vector2(grid.GetWidth()/4,grid.GetHeight()/4), //Top right
+            new Vector2(0,grid.GetHeight()/4)  //Top left
+        };
         mesh.vertices = vertices;
         mesh.triangles = triangles;
+        mesh.uv = uvs;
         mesh.RecalculateNormals();
         ground.GetComponent<MeshFilter>().mesh = mesh;
+        //Add collider for raycasting
         MeshCollider collider = ground.AddComponent<MeshCollider>();
         collider.sharedMesh = mesh;
         ground.AddComponent<MeshCollider>();
@@ -127,7 +138,7 @@ public class GameManager : MonoBehaviour
         }
         else if (buildingManager.GetCurrentTemplate() != null && mode == PLACEMENT && placementManager.GetPlacementMode() == PlacementManager.BUILDING)
         {
-            gameState.selectionContext = "Selected Building: " + buildingManager.GetCurrentTemplate().GetName() + "\nType: ???";// + buildingManager.GetCurrentTemplate().GetBuildingTypeString();
+            gameState.selectionContext = "Selected Building: " + buildingManager.GetCurrentTemplate().GetName() + "\nType: " + buildingManager.GetCurrentTemplate().GetBuildingTypeString();
         }
         else
         {

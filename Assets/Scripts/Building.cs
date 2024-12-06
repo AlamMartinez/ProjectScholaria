@@ -121,12 +121,19 @@ public class Building
     /// </summary>
     public string GetBuildingTypeString()
     {
+        return GetBuildingTypeString(type);
+    }
+    public static string GetBuildingTypeString(int type)
+    {
         switch (type)
         {
             case TYPE_NONE: return "None";
             case TYPE_DORMITORY: return "Residence Hall";
             case TYPE_LECTURE: return "Lecture Hall";
             case TYPE_DINING: return "Dining Hall";
+            case TYPE_LIBRARY: return "Library";
+            case TYPE_PARKING: return "Parking";
+            case TYPE_COMMONS: return "Commons";
         }
         return "Unspecified";
     }

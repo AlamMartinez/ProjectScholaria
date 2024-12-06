@@ -139,7 +139,8 @@ public class InputManager : MonoBehaviour
         //TODO: make better
         if(Input.GetKeyDown("r"))
         {
-            SceneManager.LoadScene(1);
+            Debug.LogWarning("reset ignored");
+            //SceneManager.LoadScene(1);
         }
         if(Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Return))
         {
