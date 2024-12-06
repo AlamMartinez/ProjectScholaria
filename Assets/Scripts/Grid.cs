@@ -92,7 +92,7 @@ public class Grid
             int x1 = x + directions[i, 0];
             int y1 = y + directions[i, 1];
             Debug.Log(x1 + ", " + y1 + " is ");
-            if (x1 >= 0 && x1 < grid.GetLength(0) && y1 >= 0 && y1 < grid.GetLength(1) && grid[x1,y1].IsPath())
+            if (x1 >= 0 && x1 < grid.GetLength(0) && y1 >= 0 && y1 < grid.GetLength(1) && (grid[x1,y1].IsPath() || grid[x1,y1].IsEntrance()))
             {
                 val += (int)(Mathf.Pow(2, i));
                 Debug.Log("valid");

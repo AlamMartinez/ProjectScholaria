@@ -14,6 +14,8 @@ public class BuildingManager
     private List<BuildingTemplate> templates;
     private int currentTemplate;
     private int buildingIndex;
+
+    private List<BuildingTemplate> buildingInventory;
     /// <summary>
     /// Creates a new BuildingManager, and initializes all BuildingTemplates.
     /// </summary>

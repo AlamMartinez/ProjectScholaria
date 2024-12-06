@@ -46,11 +46,13 @@ public class GameManager : MonoBehaviour
     private Vector2Int cursorPosition;
     public int mode;
 
+    public Color validColor;
+    public Color invalidColor;
+
     private int currExp;
     private double currHappiness;
     private int currLevel;
     private int currScore;
-
 
     public GameState gameState;
     private List<GameObject> gameObjects;
@@ -184,11 +186,24 @@ public class GameManager : MonoBehaviour
                 case PlacementManager.BUILDING:
                     cursor.GetComponent<MeshFilter>().mesh = buildingManager.GetCurrentTemplate().GetPrefab().GetComponentInChildren<MeshFilter>().sharedMesh;
                     break;
+                case PlacementManager.PATHING:
+                    cursor.GetComponent<MeshFilter>().mesh = pathPlus.GetComponent<MeshFilter>().sharedMesh;
+                    break;
+            }
+            //Change color
+            if(placementManager.CanPlaceAt(cursorPosition))
+            {
+                cursor.GetComponent<Renderer>().material.SetColor("_EmissionColor", validColor);
+            }
+            else
+            {
+                cursor.GetComponent<Renderer>().material.SetColor("_EmissionColor", invalidColor);
             }
         }
         else
         {
             cursor.GetComponent<MeshFilter>().mesh = cursorPrefab;
+            cursor.GetComponent<Renderer>().material.SetColor("_EmissionColor", validColor);
         }
     }
     /// <summary>
