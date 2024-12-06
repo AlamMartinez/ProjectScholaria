@@ -44,10 +44,11 @@ public class BuildingManager
                         int width = int.Parse(header[1]);
                         int height = int.Parse(header[2]);
                         string prefab = header[3];
-                        int type = int.Parse(header[4]);
-                        int capacity = int.Parse(header[5]);
+                        string name = header[4];
+                        int type = int.Parse(header[5]);
+                        int capacity = int.Parse(header[6]);
                         //Initialize template
-                        BuildingTemplate b = new BuildingTemplate(id, width, height, prefab, type, capacity);
+                        BuildingTemplate b = new BuildingTemplate(id, name, width, height, prefab, type, capacity);
                         for (int y = 0; y < height; y++)
                         {
                             string[] row = file.ReadLine().Split(',');
@@ -56,7 +57,6 @@ public class BuildingManager
                                 b.SetCell(x, y, int.Parse(row[x]));
                             }
                         }
-                        b.SetName(prefab);
                         templates.Add(b);
                     }
                 }
