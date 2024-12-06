@@ -41,16 +41,15 @@ public class StudentManager
         //Generate schedule for student
         student.GenerateSchedule(gameManager.GetBuildingManager());
         students.Add(student);
+        GameObject template = Resources.Load<GameObject>("Misc/student");
         //Create gameObject for student
         GameObject gameObject = new GameObject("student" + student.GetID());
         MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
         MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
         //TODO: Find a better way of doing this
-        GameObject primitive = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-        meshFilter.mesh = primitive.GetComponent<MeshFilter>().mesh;
-        Object.Destroy(primitive);
-        meshRenderer.material = new Material(Shader.Find("Standard"));
-        gameObject.transform.position = new Vector3(student.GetPositionCell().GetX(), 0, student.GetPositionCell().GetY());
+        meshFilter.mesh = template.GetComponent<MeshFilter>().sharedMesh;
+        meshRenderer.material = Resources.Load<Material>("Misc/student");
+        gameObject.transform.position = new Vector3(student.GetPositionCell().GetX(), 0.5f, student.GetPositionCell().GetY());
         gameObject.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
         student.SetGameObject(gameObject);
         Debug.Log("Created new student: ");
